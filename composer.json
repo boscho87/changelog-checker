@@ -1,0 +1,28 @@
+{
+  "name": "boscho87/changelog-checker",
+  "description": "Tool to Validate Changelog formats",
+  "type": "library",
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Boscho87\\ChangelogChecker\\": "src/",
+      "Boscho87\\tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Simon D. Müller",
+      "email": "simon.d.mueller@gmail.com"
+    }
+  ],
+  "require": {
+    "symfony/console": "^5.3",
+    "friendsofphp/php-cs-fixer": "^3.0",
+    "tigitz/php-spellchecker": "^0.2.0"
+  },
+  "bin": [
+    "bin/changelog-checker"
+  ]
+}
