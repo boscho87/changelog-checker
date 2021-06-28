@@ -54,10 +54,7 @@ abstract class AbstractChecker
 
     abstract protected function check(): void;
 
-    /**
-     * @return string fixed file content
-     */
-    abstract protected function fix(): string;
+    abstract protected function fix(): void;
 
 
     public function getWarnings(): array
@@ -73,5 +70,10 @@ abstract class AbstractChecker
     public function getFixed(): array
     {
         return array_reverse($this->fixed);
+    }
+
+    protected function isVersionLine(string $line): bool
+    {
+        return substr($line, 0, 3) === '## ';
     }
 }

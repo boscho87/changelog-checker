@@ -2,9 +2,14 @@
 
 
 return [
-        'versionBrackets' => [
-            'check' => true,
-            'error' => true,
-            'fix' => false,
+    'ascendingVersion' => [
+        'check' => true,
+        'error' => true,
+        'fix' => false,
+    ],
+    'versionBrackets' => [
+        'check' => true,
+        'error' => true,
+        'fix' => false,
     ],
 ];

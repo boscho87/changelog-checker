@@ -61,6 +61,7 @@ class ValidateChangelogCommand extends Command
         $optionResolver = new OptionResolver($optionLoader);
         $fileCheckExecutor = new FileCheckExecutor($optionResolver);
         $changelogFile = new File($changelogPath);
+        $changelogFile->writeBackup();
         $hasErrors = $fileCheckExecutor->execute($changelogFile);
 
         $errors = $fileCheckExecutor->getErrors();

@@ -9,6 +9,7 @@ use Boscho87\ChangelogChecker\Exception\FileNotFoundException;
  */
 class File implements FileInterface
 {
+    private string $backupFileSuffix = 'clc.bak';
     private string $content;
     private array $lines;
     private int $currentLine = 0;
@@ -107,5 +108,37 @@ class File implements FileInterface
             $this->setLine('', $lastLine);
         }
         file_put_contents($this->filePath, $this->content);
+    }
+
+    public function writeBackup(): void
+    {
+        $pos = strrpos($this->filePath, '/');
+        $filename = substr($this->filePath, $pos + 1);
+        $filePath = sprintf(
+            '%s/%s.%s-%s',
+            getcwd(),
+            $this->backupFileSuffix,
+            time(),
+            $filename
+        );
+
+        $this->removeOldBackups();
+        file_put_contents($filePath, $this->getContents());
+    }
+
+
+    protected function removeOldBackups(): void
+    {
+        $deleteTimeOffset = 3600 * 24;
+        $backupFiles = glob(sprintf('%s/%s.*', getcwd(), $this->backupFileSuffix));
+
+        if (count($backupFiles) > 0) {
+            array_pop($backupFiles);
+        }
+        foreach ($backupFiles as $file) {
+            if (filemtime($file) + $deleteTimeOffset < time()) {
+                unlink($file);
+            }
+        }
     }
 }

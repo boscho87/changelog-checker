@@ -31,7 +31,7 @@ class BracketChecker extends AbstractChecker
         }
     }
 
-    protected function fix(): string
+    protected function fix(): void
     {
         foreach ($this->file as $line) {
             if ($this->isVersionLine($line)) {
@@ -46,13 +46,5 @@ class BracketChecker extends AbstractChecker
                 }
             }
         }
-
-        return $this->file->getContents();
-    }
-
-
-    protected function isVersionLine($line): bool
-    {
-        return substr($line, 0, 3) === '## ';
     }
 }
