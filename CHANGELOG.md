@@ -6,7 +6,7 @@ to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 - Added Changelog Checker
-- Added 
+
 
 ## [0.0.4] - 2021-06-27
 ### Added
@@ -28,7 +28,7 @@ to [Semantic Versioning](http://semver.org/).
 - Create Project
 
 [Unreleased]: https://github.com/boscho87/changelog-checker/tree/development
-[0.0.4]:  https://github.com/boscho87/changelog-checker/compare/v0.0.3...v0.0.4
-[0.0.3]:  https://github.com/boscho87/changelog-checker/compare/v0.0.2...v0.0.3
-[0.0.2]:  https://github.com/boscho87/changelog-checker/compare/v0.0.1...v0.0.2
+[0.0.4]:  https://github.com/boscho87/changelog-checker/compare/0.0.3...0.0.4
+[0.0.3]:  https://github.com/boscho87/changelog-checker/compare/0.0.2...0.0.3
+[0.0.2]:  https://github.com/boscho87/changelog-checker/compare/0.0.1...0.0.2
 [0.0.1]: https://github.com/boscho87/changelog-checker/releases/tag/0.0.1
