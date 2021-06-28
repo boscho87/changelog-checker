@@ -9,6 +9,8 @@ use Boscho87\ChangelogChecker\Exception\FileNotFoundException;
  */
 class File implements FileInterface
 {
+    private string $backupFileSuffix = '.clc.bak';
+    private int $holdBackupFiles = 4;
     private string $content;
     private array $lines;
     private int $currentLine = 0;
@@ -45,12 +47,6 @@ class File implements FileInterface
     public function getContents(): string
     {
         return $this->content;
-    }
-
-    public function setNewContents(string $content): void
-    {
-        $this->content = $content;
-        $this->currentLine = 0;
     }
 
     public function getLines(): array
@@ -107,5 +103,36 @@ class File implements FileInterface
             $this->setLine('', $lastLine);
         }
         file_put_contents($this->filePath, $this->content);
+    }
+
+    public function writeBackup(): void
+    {
+        $pos = strrpos($this->filePath, '/');
+        $filename = substr($this->filePath, $pos + 1);
+        $filePath = sprintf(
+            '%s/%s.%s-%s',
+            getcwd(),
+            $this->backupFileSuffix,
+            time(),
+            $filename
+        );
+
+        $this->removeOldBackups();
+        file_put_contents($filePath, $this->getContents());
+    }
+
+
+    protected function removeOldBackups(): void
+    {
+        $backupFiles = glob(sprintf('%s/%s.*', getcwd(), $this->backupFileSuffix));
+        $backupFiles = array_reverse($backupFiles);
+        $backupFilesCount = count($backupFiles);
+
+        $index = $backupFilesCount - 1;
+        while (count($backupFiles) > $this->holdBackupFiles) {
+            $index--;
+            array_pop($backupFiles);
+            unlink($backupFiles[$index]);
+        }
     }
 }

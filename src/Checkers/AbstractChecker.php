@@ -32,9 +32,8 @@ abstract class AbstractChecker
             $this->file->rewind();
         }
         if ($this->options->isFix()) {
-            $fileContent = $this->fix();
+            $this->fix();
             $this->file->rewind();
-            $this->file->setNewContents($fileContent);
         }
     }
 
@@ -54,10 +53,7 @@ abstract class AbstractChecker
 
     abstract protected function check(): void;
 
-    /**
-     * @return string fixed file content
-     */
-    abstract protected function fix(): string;
+    abstract protected function fix(): void;
 
 
     public function getWarnings(): array
@@ -73,5 +69,25 @@ abstract class AbstractChecker
     public function getFixed(): array
     {
         return array_reverse($this->fixed);
+    }
+
+    protected function currentVersion(): string
+    {
+        preg_match('/\d+\.\d+\.\d+/', $this->file->getContents(), $matches);
+        var_dump($matches);
+        die();
+        if ($matches) {
+            return $matches;
+        }
+    }
+
+    protected function isVersionLine(string $line): bool
+    {
+        return substr($line, 0, 3) === '## ';
+    }
+
+    protected function isTypeLine(string $line)
+    {
+        return substr($line, 0, 3) === '###';
     }
 }

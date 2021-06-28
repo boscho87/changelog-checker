@@ -2,6 +2,10 @@
 
 namespace Boscho87\ChangelogChecker\Options;
 
+use Boscho87\ChangelogChecker\Checkers\IncreasedChecker;
+use Boscho87\ChangelogChecker\Checkers\SequenceChecker;
+use Boscho87\ChangelogChecker\Checkers\TypeChecker;
+use Boscho87\ChangelogChecker\Checkers\AscendingVersionChecker;
 use Boscho87\ChangelogChecker\Checkers\BracketChecker;
 use Boscho87\ChangelogChecker\Checkers\Checkable;
 
@@ -25,7 +29,14 @@ class OptionResolver
      */
     public function getCheckers(): array
     {
-        $checkers[] = new BracketChecker($this->loader->versionBrackets);
+        $checkers = [
+            new AscendingVersionChecker($this->loader->ascendingVersion),
+            new BracketChecker($this->loader->versionBrackets),
+            new TypeChecker($this->loader->actions),
+            new IncreasedChecker($this->loader->increased),
+            new SequenceChecker($this->loader->sequence),
+        ];
+
 
 
         return $checkers;
