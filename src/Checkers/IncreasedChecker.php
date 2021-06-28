@@ -38,7 +38,8 @@ class IncreasedChecker extends AbstractChecker
                     sprintf('Changelog not modified since %d commits', $this->failAfterXCommits)
                 );
             }
-            file_put_contents($this->commitLogFile, $result);
+            file_put_contents($this->commitLogFile, implode(PHP_EOL, $lines));
+            return;
         }
 
         file_put_contents($this->checksumFile, md5($this->file->getContents()));
