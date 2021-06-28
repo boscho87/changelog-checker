@@ -9,7 +9,7 @@ use Boscho87\ChangelogChecker\Exception\FileNotFoundException;
  */
 class File implements FileInterface
 {
-    private string $backupFileSuffix = 'clc.bak';
+    private string $backupFileSuffix = '.clc.bak';
     private int $holdBackupFiles = 4;
     private string $content;
     private array $lines;
