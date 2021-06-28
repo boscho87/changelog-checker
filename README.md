@@ -3,8 +3,7 @@
 Check if the Changelog has proper format, and if it was updated since the last commit. Some problems can be fixed by the
 tool if you want (see more in configs)
 
-the Changelog will create a backup on every script run, before manipulating the source File. 
-The Backups will be removed after 24h (filemtime) the newest backup file will not be deleted.
+On Every command it will create a Changelog Backup for you. It will rotate 4 Backlog files.
 
 Follows the Guiltiness from [Keep A Changelog](https://keepachangelog.com/en/1.1.0/)
 

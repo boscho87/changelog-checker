@@ -10,6 +10,7 @@ use Boscho87\ChangelogChecker\Exception\FileNotFoundException;
 class File implements FileInterface
 {
     private string $backupFileSuffix = 'clc.bak';
+    private int $holdBackupFiles = 4;
     private string $content;
     private array $lines;
     private int $currentLine = 0;
@@ -123,16 +124,15 @@ class File implements FileInterface
 
     protected function removeOldBackups(): void
     {
-        $deleteTimeOffset = 3600 * 24;
         $backupFiles = glob(sprintf('%s/%s.*', getcwd(), $this->backupFileSuffix));
+        $backupFiles = array_reverse($backupFiles);
+        $backupFilesCount = count($backupFiles);
 
-        if (count($backupFiles) > 0) {
+        $index = $backupFilesCount - 1;
+        while (count($backupFiles) > $this->holdBackupFiles) {
+            $index--;
             array_pop($backupFiles);
-        }
-        foreach ($backupFiles as $file) {
-            if (filemtime($file) + $deleteTimeOffset < time()) {
-                unlink($file);
-            }
+            unlink($backupFiles[$index]);
         }
     }
 }
