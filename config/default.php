@@ -18,11 +18,16 @@ return [
         'fix' => false,
     ],
     'increased' => [
-        'check' => true,
+        'check' => false,
         'error' => true,
         'fix' => false,
     ],
     'sequence' => [
+        'check' => true,
+        'error' => true,
+        'fix' => false,
+    ],
+    'linkChecker' => [
         'check' => true,
         'error' => true,
         'fix' => false,

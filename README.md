@@ -52,6 +52,26 @@ return [
         'error' => true,
         'fix' => false,
     ],
+    'actions' => [
+        'check' => true,
+        'error' => true,
+        'fix' => false,
+    ],
+    'increased' => [
+        'check' => false,
+        'error' => true,
+        'fix' => false,
+    ],
+    'sequence' => [
+        'check' => true,
+        'error' => true,
+        'fix' => false,
+    ],
+    'linkChecker' => [
+        'check' => true,
+        'error' => true,
+        'fix' => false,
+    ],
 ];
 ```
 
@@ -82,5 +102,8 @@ This Checks are Implemented and can be activated
 - Fix > no
 - creates to files `.clc.cheksum` and `.clc.version`
 
+#### Link Checker
 
+- Check if the Changelog has Links at the and of the File (Version Brackets are Required for this)
+- Fix > (Not Yet Implemented)
 
