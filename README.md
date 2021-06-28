@@ -62,7 +62,7 @@ This Checks are Implemented and can be activated
 
 #### Version Brackets
  
-- Are the Verson numbers in Brackets? If not > Error
+- Are the Version numbers in Brackets? If not > Error
 - Fix > yes
 
 #### Ascending Versioning
@@ -74,6 +74,11 @@ This Checks are Implemented and can be activated
 #### Type Checker
 
 - Check if the Type String is Valid (Added|Fixed etc.)
+- Fix > no
+
+#### Increased Checker
+
+- Check if the Changelog Changed since the last 4 commits
 - Fix > no
 
 
