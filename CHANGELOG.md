@@ -6,7 +6,7 @@ to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
-## [0.0.1] - 2021-06-27
+## [0.0.4] - 2021-06-27
 
 ### Added
 - Created Reposiotry
