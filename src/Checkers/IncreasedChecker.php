@@ -11,7 +11,7 @@ class IncreasedChecker extends AbstractChecker
 {
     private string $commitLogFile;
     private string $checksumFile;
-    private int $failAfterXCommits = 1;
+    private int $failAfterXCommits = 4;
 
     /**
      * IncreasedChecker constructor.
@@ -32,13 +32,12 @@ class IncreasedChecker extends AbstractChecker
         $commitLog = $this->getCommitLog();
         $position = strpos($commitLog, $newestCommit);
 
-        var_dump($this->changelogChanged());
         if (!$this->changelogChanged()) {
-            var_dump('has not changed');
             if ($position === false) {
                 $this->addErrorMessage(
                     sprintf('Changelog not modified since %d commits', $this->failAfterXCommits)
                 );
+                return;
             }
             file_put_contents($this->commitLogFile, implode(PHP_EOL, $lines));
             return;
