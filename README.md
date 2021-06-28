@@ -65,10 +65,15 @@ This Checks are Implemented and can be activated
 - Are the Verson numbers in Brackets? If not > Error
 - Fix > yes
 
-#### Acending Versioning
+#### Ascending Versioning
 
 - Is the Version Ascending and will never decrease
 - Also avoids duplicate Version Numbers
+- Fix > no
+
+#### Type Checker
+
+- Check if the Type String is Valid (Added|Fixed etc.)
 - Fix > no
 
 
