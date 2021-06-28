@@ -80,6 +80,7 @@ This Checks are Implemented and can be activated
 
 - Check if the Changelog Changed since the last 4 commits
 - Fix > no
+- creates to files `.clc.cheksum` and `.clc.version`
 
 
 
