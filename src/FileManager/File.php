@@ -48,12 +48,6 @@ class File implements FileInterface
         return $this->content;
     }
 
-    public function setNewContents(string $content): void
-    {
-        $this->content = $content;
-        $this->currentLine = 0;
-    }
-
     public function getLines(): array
     {
         return $this->lines;

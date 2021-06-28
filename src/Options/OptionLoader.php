@@ -52,7 +52,7 @@ class OptionLoader
             }
             $inputfileConfig = require $this->inputConfigFile;
         }
-        $configs = array_merge($configs, $defaultConfigs, $inputfileConfig);
+        $configs = array_merge($defaultConfigs, $configs, $inputfileConfig);
         foreach ($configs as $name => $config) {
             $fix = $this->forceFix !== null ? $this->forceFix : $config['fix'];
             $this->options[$name] = new Option($config['check'], $config['error'], $fix);

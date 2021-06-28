@@ -9,7 +9,7 @@ to [Semantic Versioning](http://semver.org/).
 ## [0.0.4] - 2021-06-27
 
 ### Added
-- Created Reposiotry
+- Created Repository
 - Basic setup and Configuration
 - Implement Ascending version checker
 - Create Backup before manipulate the file

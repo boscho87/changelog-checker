@@ -32,9 +32,8 @@ abstract class AbstractChecker
             $this->file->rewind();
         }
         if ($this->options->isFix()) {
-            $fileContent = $this->fix();
+            $this->fix();
             $this->file->rewind();
-            $this->file->setNewContents($fileContent);
         }
     }
 
