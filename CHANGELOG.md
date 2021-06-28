@@ -8,15 +8,17 @@ to [Semantic Versioning](http://semver.org/).
 - Added Changelog Checker
 - Added 
 
-## [0.0.4] - 2021-06-27
-
+## [0.0.2] - 2021-06-27
 ### Added
 - Created Repository
 - Basic setup and Configuration
 - Implement Ascending version checker
 - Create Backup before manipulate the file
 
+## [0.0.1] - 2021-06-27 
+### Added
+- Create Project
 
-
-[Unreleased]: 
-[0.0.4]: https://github.com/boscho87/changelog-checker/releases/tag/0.0.4
+[Unreleased]: https://github.com/boscho87/changelog-checker/tree/development
+[0.0.2]:  https://github.com/boscho87/changelog-checker/compare/v0.0.1...v0.0.4
+[0.0.1]: https://github.com/boscho87/changelog-checker/releases/tag/0.0.1
