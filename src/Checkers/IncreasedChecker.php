@@ -32,7 +32,9 @@ class IncreasedChecker extends AbstractChecker
         $commitLog = $this->getCommitLog();
         $position = strpos($commitLog, $newestCommit);
 
-        if (!$this->hasChangelogChanged()) {
+        var_dump($this->changelogChanged());
+        if (!$this->changelogChanged()) {
+            var_dump('has not changed');
             if ($position === false) {
                 $this->addErrorMessage(
                     sprintf('Changelog not modified since %d commits', $this->failAfterXCommits)
@@ -67,10 +69,10 @@ class IncreasedChecker extends AbstractChecker
         return $lastResult ?? '';
     }
 
-    private function hasChangelogChanged(): bool
+    private function changelogChanged(): bool
     {
         $currentChecksum = md5($this->file->getContents());
         $lastChecksum = $this->getChecksum();
-        return $lastChecksum === $currentChecksum;
+        return $lastChecksum !== $currentChecksum;
     }
 }
