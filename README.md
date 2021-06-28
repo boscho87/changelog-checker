@@ -15,7 +15,7 @@ Best practice: Install in a subdirectory to avoid dependency Problems
 mkdir --parents tools/changelog-checker
 composer require --working-dir=tools/changelog-checker boscho87/changelog-checker
 ## ignore backup files
-echo .gitignore >> .clc.bak.*
+echo .gitignore >> .clc.*
 echo .gitignore >> tools/changelog-checker/vendor
 ```
 
