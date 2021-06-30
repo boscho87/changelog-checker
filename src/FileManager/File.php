@@ -149,8 +149,10 @@ class File implements FileInterface
 
     public function includeLinesAfter(array $lines, int $key = null)
     {
+        $fileLines = $this->lines;
         $line = $key ?? $this->lineNumber();
-        array_splice($this->lines, $line, count($lines), $lines);
+        array_splice($fileLines, $line, 0, $lines);
+        $this->lines = $fileLines;
         $this->content = implode(PHP_EOL, $this->lines);
     }
 }

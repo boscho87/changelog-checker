@@ -5,8 +5,15 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Committed
+- 685a4e9 Implement Increase fix
+- 61d0a62 Change default options
+- e175827 Implement DefaultChecker and do some Replacements
+- 9289367 Rename command
+### Added
 - Change command name from `clc-validate` to `validate`
 - Add Default Checker
+- Added Fix for Increased Checker
 
 
 ## [1.0.0] - 2021-06-28
