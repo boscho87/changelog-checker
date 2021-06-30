@@ -36,7 +36,7 @@ class BracketChecker extends AbstractChecker
         foreach ($this->file as $line) {
             if ($this->isVersionLine($line)) {
                 $replaced = preg_replace($this->missingBracketsPattern, $this->replacement, $line);
-                $this->file->setLine($replaced, $this->file->key());
+                $this->file->setLine($replaced);
                 if ($line !== $replaced) {
                     $this->addFixedMessage(sprintf(
                         'Fixed "%s" and added brackets - line {%s}',

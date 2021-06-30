@@ -2,6 +2,7 @@
 
 namespace Boscho87\ChangelogChecker\Options;
 
+use Boscho87\ChangelogChecker\Checkers\DefaultChecker;
 use Boscho87\ChangelogChecker\Checkers\IncreasedChecker;
 use Boscho87\ChangelogChecker\Checkers\LinkChecker;
 use Boscho87\ChangelogChecker\Checkers\SequenceChecker;
@@ -30,16 +31,15 @@ class OptionResolver
      */
     public function getCheckers(): array
     {
+        //register all the checkers here
         $checkers = [
+            new DefaultChecker(), // this should always run first
+            new BracketChecker($this->loader->versionBrackets), // this should run second
             new AscendingVersionChecker($this->loader->ascendingVersion),
-            new BracketChecker($this->loader->versionBrackets),
             new TypeChecker($this->loader->actions),
             new IncreasedChecker($this->loader->increased),
-            new SequenceChecker($this->loader->sequence),
             new LinkChecker($this->loader->linkChecker)
         ];
-
-
 
         return $checkers;
     }

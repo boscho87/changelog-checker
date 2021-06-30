@@ -84,14 +84,18 @@ class File implements FileInterface
         $this->currentLine = 0;
     }
 
+    /**
+     * @return int File line number is not the array index of line!
+     */
     public function lineNumber(): int
     {
         return $this->key() + 1;
     }
 
-    public function setLine(string $content, int $key)
+    public function setLine(string $content, int $key = null): void
     {
-        $this->lines[$key] = $content;
+        $line = $key ?? $this->lineNumber() - 1;
+        $this->lines[$line] = $content;
         $this->content = implode(PHP_EOL, $this->lines);
     }
 
@@ -100,8 +104,9 @@ class File implements FileInterface
         $lastLine = count($this->lines) - 1;
         $lastLineContent = $this->lines[$lastLine];
         if (!empty($lastLineContent)) {
-            $this->setLine('', $lastLine);
+            $this->setLine('', $lastLine + 1);
         }
+
         file_put_contents($this->filePath, $this->content);
     }
 
@@ -134,5 +139,11 @@ class File implements FileInterface
             array_pop($backupFiles);
             unlink($backupFiles[$index]);
         }
+    }
+
+    public function setNewContent(string $contents)
+    {
+        $this->content = $contents;
+        $this->lines = explode(PHP_EOL, $contents);
     }
 }

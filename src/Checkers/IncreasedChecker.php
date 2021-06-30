@@ -11,7 +11,6 @@ class IncreasedChecker extends AbstractChecker
 {
     private string $commitLogFile;
     private string $checksumFile;
-    private int $failAfterXCommits = 4;
 
     /**
      * IncreasedChecker constructor.
@@ -25,7 +24,8 @@ class IncreasedChecker extends AbstractChecker
 
     protected function check(): void
     {
-        $command = sprintf('git log --oneline -n %d', $this->failAfterXCommits);
+        $failAfterXCommits = $this->options->fail_after;
+        $command = sprintf('git log --oneline -n %d', $failAfterXCommits);
         $result = shell_exec($command);
         $lines = array_filter(explode(PHP_EOL, $result));
         $newestCommit = $lines[0] ?? '';
@@ -35,7 +35,7 @@ class IncreasedChecker extends AbstractChecker
         if (!$this->changelogChanged()) {
             if ($position === false) {
                 $this->addErrorMessage(
-                    sprintf('Changelog not modified since %d commits', $this->failAfterXCommits)
+                    sprintf('Changelog not modified since %d commits', $failAfterXCommits)
                 );
                 return;
             }
@@ -48,7 +48,7 @@ class IncreasedChecker extends AbstractChecker
 
     protected function fix(): void
     {
-        // TODO: Implement fix() method.
+        //todo get the changes from the git logs and add it do the readme
     }
 
 

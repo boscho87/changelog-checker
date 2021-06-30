@@ -6,6 +6,7 @@ to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 - Change command name from `clc-validate` to `validate`
+- Add Default Checker
 
 
 ## [1.0.0] - 2021-06-28
@@ -27,13 +28,13 @@ to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Fixed some minor Bugs
 
-## [0.0.1] - 2021-06-27 
+## [0.0.1] - 2021-06-27
 ### Added
 - Create Project
 
 [Unreleased]: https://github.com/boscho87/changelog-checker/compare/0.0.4...master
-[1.0.0]:  https://github.com/boscho87/changelog-checker/compare/0.0.4...1.0.0
-[0.0.4]:  https://github.com/boscho87/changelog-checker/compare/0.0.3...0.0.4
-[0.0.3]:  https://github.com/boscho87/changelog-checker/compare/0.0.2...0.0.3
-[0.0.2]:  https://github.com/boscho87/changelog-checker/compare/0.0.1...0.0.2
+[1.0.0]: https://github.com/boscho87/changelog-checker/compare/0.0.4...1.0.0
+[0.0.4]: https://github.com/boscho87/changelog-checker/compare/0.0.3...0.0.4
+[0.0.3]: https://github.com/boscho87/changelog-checker/compare/0.0.2...0.0.3
+[0.0.2]: https://github.com/boscho87/changelog-checker/compare/0.0.1...0.0.2
 [0.0.1]: https://github.com/boscho87/changelog-checker/releases/tag/0.0.1

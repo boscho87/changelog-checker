@@ -14,7 +14,7 @@ abstract class AbstractChecker
     private array $warnings = [];
     private array $errors = [];
     private array $fixed = [];
-    private Option $options;
+    protected Option $options;
 
     /**
      * AbstractChecker constructor.

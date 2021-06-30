@@ -7,6 +7,13 @@ On Every command it will create a Changelog Backup for you. It will rotate 4 Bac
 
 Follows the Guiltiness from [Keep A Changelog](https://keepachangelog.com/en/1.1.0/)
 
+This tool should only be used in development environments.
+
+#### Requirements
+
+- \> php7.4
+- some checks require git
+
 ### Installation
 
 Best practice: Install in a subdirectory to avoid dependency Problems
@@ -75,15 +82,19 @@ return [
 ];
 ```
 
-
 ### Checkers
 
 This Checks are Implemented and can be activated
 
+#### Default Checkers
+- String replacement e.g more than two spaces will be removed with only one
+- Fix > yes
+- No Options available
 #### Version Brackets
- 
+
 - Are the Version numbers in Brackets? If not > Error
 - Fix > yes
+- No Options available
 
 #### Ascending Versioning
 
@@ -99,11 +110,19 @@ This Checks are Implemented and can be activated
 #### Increased Checker
 
 - Check if the Changelog Changed since the last 4 commits
-- Fix > no
-- creates to files `.clc.cheksum` and `.clc.version`
+- Fix Adds Commit messages to the unreleased Section
+- creates two files `.clc.cheksum` and `.clc.version`
+- requires git, runs `git log --oneline -n 4` (4 can change)
 
 #### Link Checker
 
 - Check if the Changelog has Links at the and of the File (Version Brackets are Required for this)
 - Fix > (Not Yet Implemented)
+- requires `git`  (git )
 
+### Roadmap
+
+- Add more Checkers
+- Implement more fix methods (where possible)
+- Implement tests for all "Checkers"
+- Refactor the Checker, after tests are written
