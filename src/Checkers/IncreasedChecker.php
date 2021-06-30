@@ -48,7 +48,13 @@ class IncreasedChecker extends AbstractChecker
 
     protected function fix(): void
     {
-        //todo get the changes from the git logs and add it do the readme
+        $commits = shell_exec(sprintf('git commit --oneline -n %n'), $this->options->fail_after);
+        $commitArray = explode(PHP_EOL, $commits);
+        foreach ($this->file as $line) {
+            if (strpos($line, '[Unreleased]')) {
+                $this->file->includeLinesAfter($commitArray, $this->file->key());
+            }
+        }
     }
 
 

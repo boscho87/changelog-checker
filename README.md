@@ -45,6 +45,9 @@ echo .gitignore >> tools/changelog-checker/vendor
 
 Create a file named `{project-root}/_clc.php` to Overwrite the default configs
 
+> Be Aware that some options depends on some kind of Correctness of the Changelog
+E.g. if there is no [Unreleased] tag, the Increased Checker can not add commit messages underneath it.
+but the AscendingVersionChecker can resolve this and add an Unreleased Tag, so you should turn fix to true.
 ```php
 <?php
 //if you leave something empty, the default will be used
@@ -68,6 +71,8 @@ return [
         'check' => false,
         'error' => true,
         'fix' => false,
+        //commits allowed without a changelog change
+        'fail_after' => 1,
     ],
     'sequence' => [
         'check' => true,
