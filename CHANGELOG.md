@@ -5,6 +5,9 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- Change command name from `clc-validate` to `validate`
+
+
 ## [1.0.0] - 2021-06-28
 ### Added
 - Added Changelog Checkers
