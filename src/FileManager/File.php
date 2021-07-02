@@ -155,4 +155,9 @@ class File implements FileInterface
         $this->lines = $fileLines;
         $this->content = implode(PHP_EOL, $this->lines);
     }
+
+    public function getHash(): string
+    {
+        return md5($this->getHash());
+    }
 }

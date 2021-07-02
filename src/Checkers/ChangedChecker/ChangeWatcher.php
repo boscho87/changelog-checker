@@ -48,7 +48,7 @@ class ChangeWatcher
         $command = 'git log --oneline -n 1';
         $result = shell_exec($command);
         file_put_contents($this->commitLogFile, trim($result));
-        file_put_contents($this->checksumFile, md5($file->getContents()));
+        file_put_contents($this->checksumFile, $file->getHash());
     }
 
 
