@@ -43,17 +43,32 @@ class CreateReleaseCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $style = new SymfonyStyle($input, $output);
-        $changelogPath = realpath($input->getOption('file'));
+        $changelogPath = realpath($input->getOption('changelog-file'));
+        $composerFile = realpath($input->getOption('composer-file'));
         $changelogFile = new File($changelogPath);
         $changelogFile->writeBackup();
-
+        $release = '1.1.0'; // get from Changelog
         //get last version from the changelog
         //increase it by one minor step
         // move all unreleased entries to the new version section
         //modify the unreleased link (get current base git url)
         // add the new version link
-        //set version to composer.json
+        if ($composerFile) {
+            $composerContent = file_get_contents($composerFile);
+            $replaced = preg_replace('/"version":"\d+.\d+.\d+"/', '"version": "4.0.0"', $composerContent);
+            if ($composerContent !== $replaced) {
+                file_put_contents($composerFile, $replaced);
+                $style->info('Updated composer File');
+            }
+        }
         //git commit with release message
         //git create tag
+
+
+        $style->success(sprintf(
+            'Created new Release %s',
+            $release
+        ));
+        return Command::SUCCESS;
     }
 }
