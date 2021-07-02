@@ -5,12 +5,6 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-### Committed
-- bb7082e Release 1.1.0
-- 538c6b6 Update Changelog for new Release
-- 079baeb Update Checker
-- a6691a3 Fixed git Cache
-
 ## [1.1.0] - 2021-06-29
 ### Added
 - DefaultChecker
@@ -41,6 +35,7 @@ to [Semantic Versioning](http://semver.org/).
 - Create Project
 
 [Unreleased]: https://github.com/boscho87/changelog-checker/compare/0.0.4...master
+[1.1.0]: https://github.com/boscho87/changelog-checker/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/boscho87/changelog-checker/compare/0.0.4...1.0.0
 [0.0.4]: https://github.com/boscho87/changelog-checker/compare/0.0.3...0.0.4
 [0.0.3]: https://github.com/boscho87/changelog-checker/compare/0.0.2...0.0.3
