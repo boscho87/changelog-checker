@@ -29,7 +29,7 @@ class CommitManager
         $commits = shell_exec($command);
         $commitArray = explode(PHP_EOL, $commits);
         $commitArray = array_filter($commitArray);
-        return array_map(fn($commit) => "- $commit", $commitArray);
+        return array_map(fn ($commit) => "- $commit", $commitArray);
     }
 
     public function hasFixedCommits(): bool
@@ -70,6 +70,6 @@ class CommitManager
                 unset($commits[$key]);
             }
         }
-       return array_filter($commits);
+        return array_filter($commits);
     }
 }

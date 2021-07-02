@@ -31,6 +31,7 @@ class ChangeWatcher
         $commits = shell_exec($command);
         $lastResult = $this->getLastCommit();
         if (!strpos($commits, $lastResult)) {
+            $this->setCommitHash();
             return $this->changelogChanged();
         }
         return true;
@@ -41,18 +42,17 @@ class ChangeWatcher
         $currentChecksum = $this->changelogFile->getHash();
         $lastChecksum = $this->getLastChangelogHash();
         if (trim($lastChecksum) !== trim($currentChecksum)) {
-            $this->setChangelogChanged();
+            file_put_contents($this->checksumFile, $this->changelogFile->getHash());
             return true;
         }
         return false;
     }
 
-    private function setChangelogChanged()
+    private function setCommitHash()
     {
         $command = 'git log --oneline -n 1';
         $result = shell_exec($command);
         file_put_contents($this->commitLogFile, trim($result));
-        file_put_contents($this->checksumFile, $this->changelogFile->getHash());
     }
 
 

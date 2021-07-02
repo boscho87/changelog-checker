@@ -5,10 +5,12 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Committed
+- 7f11166 Fixed Checker
 - a4f0786 Update ChangeChecker
 - d481801 Update ChangeChecker
 - 9881026 Extract hash method into file
-- 078f413 Extract hash method into file
+
 ## [1.0.0] - 2021-06-28
 ### Added
 - Added Changelog Checkers## [0.0.4] - 2021-06-27

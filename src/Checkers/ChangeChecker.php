@@ -39,7 +39,8 @@ class ChangeChecker extends AbstractChecker
 
     protected function fix(): void
     {
-        $commitManager = new CommitManager($this->file);;
+        $commitManager = new CommitManager($this->file);
+        ;
         $changeWatcher = new ChangeWatcher($this->file);
         if ($changeWatcher->changelogChangedSinceLastCommits(
             $this->failAfterXCommits,
@@ -47,7 +48,7 @@ class ChangeChecker extends AbstractChecker
             return;
         }
         $commits = $commitManager->getLastCommits($this->failAfterXCommits);
-        $commitManager->addCommitTitleToCommitArray($commits);
+        $commits = $commitManager->addCommitTitleToCommitArray($commits);
         $lineIndex = $commitManager->getLineToAddCommits();
         if (!$lineIndex) {
             $this->addErrorMessage(
@@ -60,6 +61,7 @@ class ChangeChecker extends AbstractChecker
         }
         $commits = $commitManager->filterCommitsAlreadyInChangelog($commits);
         if (!empty($commits)) {
+            array_push($commits, '');
             $this->file->includeLinesAfter($commits, $lineIndex);
             $message = sprintf(
                 'Added commit changes "%s" to line %s',
