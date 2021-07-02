@@ -42,7 +42,9 @@ class ChangeChecker extends AbstractChecker
 
     protected function fix(): void
     {
+        return;
         $this->commitManager = new CommitManager($this->file);
+        ;
         $failAfterXCommits = $this->options->fail_after;
 
         if (!$this->changeWatcher->changelogChangedSinceLastCommits(
@@ -51,8 +53,6 @@ class ChangeChecker extends AbstractChecker
         )) {
             return;
         }
-
-
 
         $commits = $this->commitManager->getLastCommits($failAfterXCommits);
         $this->commitManager->addCommitTitleToCommitArray($commits);

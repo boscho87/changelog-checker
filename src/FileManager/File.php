@@ -158,6 +158,6 @@ class File implements FileInterface
 
     public function getHash(): string
     {
-        return md5($this->getHash());
+        return md5($this->getContents());
     }
 }
