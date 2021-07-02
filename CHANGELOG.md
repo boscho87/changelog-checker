@@ -5,6 +5,15 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2021-06-29
+### Added
+- DefaultChecker
+- Implement fix logic in IncreaseChecker
+
+### Changed
+- Rename Increased Checker to ChangeChecker
+
+
 ## [1.0.0] - 2021-06-28
 ### Added
 - Added Changelog Checkers## [0.0.4] - 2021-06-27
