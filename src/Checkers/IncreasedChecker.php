@@ -26,18 +26,13 @@ class IncreasedChecker extends AbstractChecker
 
     protected function check(): void
     {
-        $newestCommit = $lines[0] ?? '';
-        $commitLog = $this->getCommitLog();
-        $position = strpos($commitLog, $newestCommit);
-
-        if (!$this->changelogChanged()) {
-            if ($position === false) {
-                $this->addErrorMessage(
-                    sprintf('Changelog not modified since %d commits', $this->failAfterXCommits)
-                );
-                return;
-            }
-            file_put_contents($this->commitLogFile, implode(PHP_EOL, $lines));
+        if ($this->changelogChanged()) {
+            $this->setChangelogChanged();
+        }
+        if (!$this->lastChangeInValidRange()) {
+            $this->addErrorMessage(
+                sprintf('Changelog not modified since %d commits', $this->failAfterXCommits)
+            );
         }
     }
 
@@ -102,23 +97,24 @@ class IncreasedChecker extends AbstractChecker
         if (!empty($commitArray)) {
             $this->file->includeLinesAfter($commitArray, $lineIndex);
         }
-        file_put_contents($this->commitLogFile, implode(PHP_EOL, $lines));
-        $this->changelogChanged();
+        $this->setChangelogChanged();
     }
 
 
-    protected function changelogHasChangedBetweenCommits(): bool
+    protected function lastChangeInValidRange(): bool
     {
-        $changelogHasChanged = $this->changelogChanged();
         $command = sprintf('git log --oneline -n %d', $this->failAfterXCommits);
-        $result = shell_exec($command);
-        $lines = array_filter(explode(PHP_EOL, $result));
+        $commits = shell_exec($command);
         $lastResult = $this->getCommitLog();
+        if (!strpos($commits, $lastResult)) {
+            return $this->changelogChanged();
+        }
+        return true;
     }
 
     protected function setChangelogChanged()
     {
-        $command = 'git log --online -n 1';
+        $command = 'git log --oneline -n 1';
         $result = shell_exec($command);
         file_put_contents($this->commitLogFile, trim($result));
         file_put_contents($this->checksumFile, md5($this->file->getContents()));
@@ -129,7 +125,7 @@ class IncreasedChecker extends AbstractChecker
     {
         $currentChecksum = md5($this->file->getContents());
         $lastChecksum = $this->getChecksum();
-        return $lastChecksum !== $currentChecksum;
+        return trim($lastChecksum) !== trim($currentChecksum);
     }
 
     private function getChecksum(): string

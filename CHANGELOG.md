@@ -6,16 +6,13 @@ to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Committed
+- 9abef93 WIP: rewoke the IncreasedChecker
 - 90348c1 WIP: Fix IncreaseChecker
 - 685a4e9 Implement Increase fix
-- 61d0a62 Change default options
-- e175827 Implement DefaultChecker and do some Replacements
-- 9289367 Rename command
 ### Added
 - Change command name from `clc-validate` to `validate`
 - Add Default Checker
 - Added Fix for Increased Checker
-
 
 ## [1.0.0] - 2021-06-28
 ### Added
@@ -39,6 +36,9 @@ to [Semantic Versioning](http://semver.org/).
 ## [0.0.1] - 2021-06-27
 ### Added
 - Create Project
+
+
+
 
 [Unreleased]: https://github.com/boscho87/changelog-checker/compare/0.0.4...master
 [1.0.0]: https://github.com/boscho87/changelog-checker/compare/0.0.4...1.0.0

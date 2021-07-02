@@ -22,7 +22,7 @@ return [
         'error' => true,
         'fix' => false,
         //commits allowed without a changelog change
-        'fail_after' => 4,
+        'fail_after' => 3,
     ],
     'sequence' => [
         'check' => true,
