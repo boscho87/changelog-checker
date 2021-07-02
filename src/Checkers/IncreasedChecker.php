@@ -2,6 +2,7 @@
 
 namespace Boscho87\ChangelogChecker\Checkers;
 
+use Boscho87\ChangelogChecker\Checkers\ChangedChecker\ChangeWatcher;
 use Boscho87\ChangelogChecker\Options\Option;
 
 /**
@@ -9,9 +10,8 @@ use Boscho87\ChangelogChecker\Options\Option;
  */
 class IncreasedChecker extends AbstractChecker
 {
-    private string $commitLogFile;
-    private string $checksumFile;
     private int $failAfterXCommits;
+    private ChangeWatcher $changeWatcher;
 
     /**
      * IncreasedChecker constructor.
@@ -20,25 +20,28 @@ class IncreasedChecker extends AbstractChecker
     {
         parent::__construct($options);
         $this->failAfterXCommits = (int)$this->options->fail_after;
-        $this->commitLogFile = getcwd() . '/.clc.version';
-        $this->checksumFile = getcwd() . '/.clc.checksum';
+        $this->changeWatcher = new ChangeWatcher();
     }
 
     protected function check(): void
     {
-        if ($this->changelogChanged()) {
-            $this->setChangelogChanged();
+        if ($this->changeWatcher->changelogChangedSinceLastCommits(
+            $this->file,
+            $this->failAfterXCommits
+        )) {
+            return;
         }
-        if (!$this->lastChangeInValidRange()) {
-            $this->addErrorMessage(
-                sprintf('Changelog not modified since %d commits', $this->failAfterXCommits)
-            );
-        }
+        $this->addErrorMessage(
+            sprintf('Changelog not modified since %d commits', $this->failAfterXCommits)
+        );
     }
 
     protected function fix(): void
     {
-        if ($this->lastChangeInValidRange()) {
+        if (!$this->changeWatcher->changelogChangedSinceLastCommits(
+            $this->file,
+            $this->failAfterXCommits
+        )) {
             return;
         }
 
@@ -83,16 +86,7 @@ class IncreasedChecker extends AbstractChecker
     }
 
 
-    protected function lastChangeInValidRange(): bool
-    {
-        $command = sprintf('git log --oneline -n %d', $this->failAfterXCommits);
-        $commits = shell_exec($command);
-        $lastResult = $this->getCommitLog();
-        if (!strpos($commits, $lastResult)) {
-            return $this->changelogChanged();
-        }
-        return true;
-    }
+
 
     protected function setChangelogChanged()
     {
@@ -100,30 +94,6 @@ class IncreasedChecker extends AbstractChecker
         $result = shell_exec($command);
         file_put_contents($this->commitLogFile, trim($result));
         file_put_contents($this->checksumFile, md5($this->file->getContents()));
-    }
-
-
-    private function changelogChanged(): bool
-    {
-        $currentChecksum = md5($this->file->getContents());
-        $lastChecksum = $this->getChecksum();
-        return trim($lastChecksum) !== trim($currentChecksum);
-    }
-
-    private function getChecksum(): string
-    {
-        if (file_exists($this->checksumFile) && is_file($this->checksumFile)) {
-            $lastResult = file_get_contents($this->checksumFile);
-        }
-        return $lastResult ?? '';
-    }
-
-    private function getCommitLog(): string
-    {
-        if (file_exists($this->commitLogFile) && is_file($this->commitLogFile)) {
-            $lastResult = file_get_contents($this->commitLogFile);
-        }
-        return $lastResult ?? '';
     }
 
 

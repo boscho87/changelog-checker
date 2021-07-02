@@ -5,12 +5,6 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-
-### Added
-- Change command name from `clc-validate` to `validate`
-- Add Default Checker to Replace spaces and empty lines
-- Added Fix for Increased Checker
-
 ## [1.0.0] - 2021-06-28
 ### Added
 - Added Changelog Checkers## [0.0.4] - 2021-06-27
