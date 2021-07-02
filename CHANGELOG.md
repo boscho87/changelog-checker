@@ -5,6 +5,12 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Committed
+- 9fa2f68 Changelog Changed
+- 3de5419 Fixed Checker
+- 7f11166 Fixed Checker
+- a4f0786 Update ChangeChecker
+
 ## [1.0.0] - 2021-06-28
 ### Added
 - Added Changelog Checkers## [0.0.4] - 2021-06-27

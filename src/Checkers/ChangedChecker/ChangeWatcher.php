@@ -31,6 +31,7 @@ class ChangeWatcher
         $commits = shell_exec($command);
         $lastResult = $this->getLastCommit();
         if (!strpos($commits, $lastResult)) {
+            $this->setChangelogChanged();
             return $this->changelogChanged();
         }
         return true;
@@ -41,7 +42,6 @@ class ChangeWatcher
         $currentChecksum = $this->changelogFile->getHash();
         $lastChecksum = $this->getLastChangelogHash();
         if (trim($lastChecksum) !== trim($currentChecksum)) {
-            $this->setChangelogChanged();
             return true;
         }
         return false;
