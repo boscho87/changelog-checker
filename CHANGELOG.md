@@ -6,6 +6,7 @@ to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Committed
+- 90348c1 WIP: Fix IncreaseChecker
 - 685a4e9 Implement Increase fix
 - 61d0a62 Change default options
 - e175827 Implement DefaultChecker and do some Replacements

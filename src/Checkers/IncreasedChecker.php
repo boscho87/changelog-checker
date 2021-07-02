@@ -11,23 +11,21 @@ class IncreasedChecker extends AbstractChecker
 {
     private string $commitLogFile;
     private string $checksumFile;
+    private int $failAfterXCommits;
 
     /**
      * IncreasedChecker constructor.
      */
     public function __construct(Option $options)
     {
+        parent::__construct($options);
+        $this->failAfterXCommits = (int)$this->options->fail_after;
         $this->commitLogFile = getcwd() . '/.clc.version';
         $this->checksumFile = getcwd() . '/.clc.checksum';
-        parent::__construct($options);
     }
 
     protected function check(): void
     {
-        $failAfterXCommits = $this->options->fail_after;
-        $command = sprintf('git log --oneline -n %d', $failAfterXCommits);
-        $result = shell_exec($command);
-        $lines = array_filter(explode(PHP_EOL, $result));
         $newestCommit = $lines[0] ?? '';
         $commitLog = $this->getCommitLog();
         $position = strpos($commitLog, $newestCommit);
@@ -35,15 +33,12 @@ class IncreasedChecker extends AbstractChecker
         if (!$this->changelogChanged()) {
             if ($position === false) {
                 $this->addErrorMessage(
-                    sprintf('Changelog not modified since %d commits', $failAfterXCommits)
+                    sprintf('Changelog not modified since %d commits', $this->failAfterXCommits)
                 );
                 return;
             }
             file_put_contents($this->commitLogFile, implode(PHP_EOL, $lines));
-            return;
         }
-
-        $this->markChangedChangelog();
     }
 
     protected function fix(): void
@@ -112,12 +107,29 @@ class IncreasedChecker extends AbstractChecker
     }
 
 
-    private function getCommitLog(): string
+    protected function changelogHasChangedBetweenCommits(): bool
     {
-        if (file_exists($this->commitLogFile) && is_file($this->commitLogFile)) {
-            $lastResult = file_get_contents($this->commitLogFile);
-        }
-        return $lastResult ?? '';
+        $changelogHasChanged = $this->changelogChanged();
+        $command = sprintf('git log --oneline -n %d', $this->failAfterXCommits);
+        $result = shell_exec($command);
+        $lines = array_filter(explode(PHP_EOL, $result));
+        $lastResult = $this->getCommitLog();
+    }
+
+    protected function setChangelogChanged()
+    {
+        $command = 'git log --online -n 1';
+        $result = shell_exec($command);
+        file_put_contents($this->commitLogFile, trim($result));
+        file_put_contents($this->checksumFile, md5($this->file->getContents()));
+    }
+
+
+    private function changelogChanged(): bool
+    {
+        $currentChecksum = md5($this->file->getContents());
+        $lastChecksum = $this->getChecksum();
+        return $lastChecksum !== $currentChecksum;
     }
 
     private function getChecksum(): string
@@ -128,15 +140,11 @@ class IncreasedChecker extends AbstractChecker
         return $lastResult ?? '';
     }
 
-    private function changelogChanged(): bool
+    private function getCommitLog(): string
     {
-        $currentChecksum = md5($this->file->getContents());
-        $lastChecksum = $this->getChecksum();
-        return $lastChecksum !== $currentChecksum;
-    }
-
-    protected function markChangedChangelog(): void
-    {
-        file_put_contents($this->checksumFile, md5($this->file->getContents()));
+        if (file_exists($this->commitLogFile) && is_file($this->commitLogFile)) {
+            $lastResult = file_get_contents($this->commitLogFile);
+        }
+        return $lastResult ?? '';
     }
 }
