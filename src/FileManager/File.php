@@ -21,27 +21,10 @@ class File implements FileInterface
      */
     public function __construct(string $path)
     {
-        try {
-            $path = realpath($path);
-            $this->filePath = $path;
-            $this->content = file_get_contents($path);
-            $handle = @fopen($path, "r");
-            if ($handle) {
-                while (($buffer = fgets($handle)) !== false) {
-                    $this->lines[] = trim($buffer);
-                }
-                if (!feof($handle)) {
-                    echo "Fehler: unerwarteter fgets() Fehlschlag\n";
-                }
-                fclose($handle);
-            }
-        } catch (\Throwable $throwable) {
-            throw new FileNotFoundException(sprintf(
-                'File %s not found Error:{%s}',
-                $path,
-                $throwable->getMessage()
-            ));
-        }
+        $path = realpath($path);
+        $this->filePath = $path;
+        $content = file_get_contents($path);
+        $this->setNewContent($content);
     }
 
     public function getContents(): string

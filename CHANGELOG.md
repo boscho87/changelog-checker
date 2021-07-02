@@ -5,6 +5,12 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Committed
+- bb7082e Release 1.1.0
+- 538c6b6 Update Changelog for new Release
+- 079baeb Update Checker
+- a6691a3 Fixed git Cache
+
 ## [1.1.0] - 2021-06-29
 ### Added
 - DefaultChecker
@@ -12,7 +18,6 @@ to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Rename Increased Checker to ChangeChecker
-
 
 ## [1.0.0] - 2021-06-28
 ### Added
