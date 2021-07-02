@@ -43,6 +43,14 @@ class ChangeWatcher
         return false;
     }
 
+    private function setChangelogChanged(File $file)
+    {
+        $command = 'git log --oneline -n 1';
+        $result = shell_exec($command);
+        file_put_contents($this->commitLogFile, trim($result));
+        file_put_contents($this->checksumFile, md5($file->getContents()));
+    }
+
 
     private function getLastCommit(): string
     {

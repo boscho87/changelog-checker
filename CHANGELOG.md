@@ -5,6 +5,9 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- 65f3836 Refactor commits
+- 0634b57 Update Increaded Checker and Defaultchecker
+- 84aaa01 WIP: rewoke the IncreasedChecker
 ## [1.0.0] - 2021-06-28
 ### Added
 - Added Changelog Checkers## [0.0.4] - 2021-06-27

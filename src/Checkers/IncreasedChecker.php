@@ -3,6 +3,7 @@
 namespace Boscho87\ChangelogChecker\Checkers;
 
 use Boscho87\ChangelogChecker\Checkers\ChangedChecker\ChangeWatcher;
+use Boscho87\ChangelogChecker\Checkers\ChangedChecker\CommitManager;
 use Boscho87\ChangelogChecker\Options\Option;
 
 /**
@@ -12,6 +13,7 @@ class IncreasedChecker extends AbstractChecker
 {
     private int $failAfterXCommits;
     private ChangeWatcher $changeWatcher;
+    private CommitManager $commitManager;
 
     /**
      * IncreasedChecker constructor.
@@ -25,6 +27,8 @@ class IncreasedChecker extends AbstractChecker
 
     protected function check(): void
     {
+        $this->commitManager = new CommitManager($this->file);
+
         if ($this->changeWatcher->changelogChangedSinceLastCommits(
             $this->file,
             $this->failAfterXCommits
@@ -38,6 +42,8 @@ class IncreasedChecker extends AbstractChecker
 
     protected function fix(): void
     {
+        $this->commitManager = new CommitManager($this->file);
+
         if (!$this->changeWatcher->changelogChangedSinceLastCommits(
             $this->file,
             $this->failAfterXCommits
@@ -45,18 +51,12 @@ class IncreasedChecker extends AbstractChecker
             return;
         }
 
-        $committedTitle = '### Committed';
+
         $failAfterXCommits = $this->options->fail_after;
-        $command = sprintf('git log --oneline -n %d', $failAfterXCommits);
-        $commits = shell_exec($command);
-        $commitArray = explode(PHP_EOL, $commits);
-        $commitArray = array_filter($commitArray);
-        $commitArray = array_map(fn ($commit) => "- $commit", $commitArray);
-        $hasFixedCommits = strpos($this->file->getContents(), $committedTitle) !== false;
-        if (!empty($commitArray) && !$hasFixedCommits) {
-            array_unshift($commitArray, $committedTitle);
-        }
-        $lineIndex = $this->getLineToAddCommits($committedTitle);
+
+        $commits = $this->commitManager->getLastCommits($failAfterXCommits);
+        $this->commitManager->addCommitTitleToCommitArray($commits);
+        $lineIndex = $this->commitManager->getLineToAddCommits();
         if (!isset($lineIndex)) {
             $this->addErrorMessage(
                 sprintf(
@@ -67,52 +67,20 @@ class IncreasedChecker extends AbstractChecker
             return;
         }
 
-        foreach ($commitArray as $key => $commit) {
+        foreach ($commits as $key => $commit) {
             if (strpos($this->file->getContents(), $commit)) {
-                unset($commitArray[$key]);
+                unset($commits[$key]);
             }
         }
-        $commitArray = array_filter($commitArray);
-        if (!empty($commitArray)) {
-            $this->file->includeLinesAfter($commitArray, $lineIndex);
+        $commits = array_filter($commits);
+        if (!empty($commits)) {
+            $this->file->includeLinesAfter($commits, $lineIndex);
             $message = sprintf(
                 'Added commit changes "%s" to line %s',
                 $lineIndex,
                 $this->file->lineNumber()
             );
             $this->addFixedMessage($message);
-            $this->setChangelogChanged();
         }
-    }
-
-
-
-
-    protected function setChangelogChanged()
-    {
-        $command = 'git log --oneline -n 1';
-        $result = shell_exec($command);
-        file_put_contents($this->commitLogFile, trim($result));
-        file_put_contents($this->checksumFile, md5($this->file->getContents()));
-    }
-
-
-    protected function getLineToAddCommits(string $committedTitle): ?int
-    {
-        $hasFixedCommits = strpos($this->file->getContents(), $committedTitle) !== false;
-        foreach ($this->file as $line) {
-            if ($hasFixedCommits) {
-                if (strpos($line, $committedTitle) !== false) {
-                    $lineIndex = $this->file->key() + 1;
-                    break;
-                }
-                continue;
-            }
-            if (strpos($line, '[Unreleased]')) {
-                $lineIndex = $this->file->key() + 2;
-                break;
-            }
-        }
-        return $lineIndex ?? null;
     }
 }
