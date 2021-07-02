@@ -7,13 +7,13 @@ use Boscho87\ChangelogChecker\Checkers\ChangedChecker\CommitManager;
 use Boscho87\ChangelogChecker\Options\Option;
 
 /**
+ * //todo refactor (also the watcher and der manager)!
  * Class ChangeChecker
  */
 class ChangeChecker extends AbstractChecker
 {
     private int $failAfterXCommits;
-    private ChangeWatcher $changeWatcher;
-    private CommitManager $commitManager;
+
 
     /**
      * ChangeChecker constructor.
@@ -22,15 +22,12 @@ class ChangeChecker extends AbstractChecker
     {
         parent::__construct($options);
         $this->failAfterXCommits = (int)$this->options->fail_after;
-        $this->changeWatcher = new ChangeWatcher();
     }
 
     protected function check(): void
     {
-        $this->commitManager = new CommitManager($this->file);
-
-        if ($this->changeWatcher->changelogChangedSinceLastCommits(
-            $this->file,
+        $changeWatcher = new ChangeWatcher($this->file);
+        if ($changeWatcher->changelogChangedSinceLastCommits(
             $this->failAfterXCommits
         )) {
             return;
@@ -42,21 +39,17 @@ class ChangeChecker extends AbstractChecker
 
     protected function fix(): void
     {
-        $this->commitManager = new CommitManager($this->file);
-        ;
-        $failAfterXCommits = $this->options->fail_after;
-
-        if (!$this->changeWatcher->changelogChangedSinceLastCommits(
-            $this->file,
-            $failAfterXCommits
+        $commitManager = new CommitManager($this->file);;
+        $changeWatcher = new ChangeWatcher($this->file);
+        if ($changeWatcher->changelogChangedSinceLastCommits(
+            $this->failAfterXCommits,
         )) {
             return;
         }
-
-        $commits = $this->commitManager->getLastCommits($failAfterXCommits);
-        $this->commitManager->addCommitTitleToCommitArray($commits);
-        $lineIndex = $this->commitManager->getLineToAddCommits();
-        if (!isset($lineIndex)) {
+        $commits = $commitManager->getLastCommits($this->failAfterXCommits);
+        $commitManager->addCommitTitleToCommitArray($commits);
+        $lineIndex = $commitManager->getLineToAddCommits();
+        if (!$lineIndex) {
             $this->addErrorMessage(
                 sprintf(
                     '%s could not be added to the Changelog, because the [Unreleased] tag is missing',
@@ -65,13 +58,7 @@ class ChangeChecker extends AbstractChecker
             );
             return;
         }
-
-        foreach ($commits as $key => $commit) {
-            if (strpos($this->file->getContents(), $commit)) {
-                unset($commits[$key]);
-            }
-        }
-        $commits = array_filter($commits);
+        $commits = $commitManager->filterCommitsAlreadyInChangelog($commits);
         if (!empty($commits)) {
             $this->file->includeLinesAfter($commits, $lineIndex);
             $message = sprintf(

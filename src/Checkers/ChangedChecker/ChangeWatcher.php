@@ -3,6 +3,7 @@
 namespace Boscho87\ChangelogChecker\Checkers\ChangedChecker;
 
 use Boscho87\ChangelogChecker\FileManager\File;
+use Boscho87\ChangelogChecker\FileManager\FileInterface;
 
 /**
  * Class ChangeWatcher
@@ -11,44 +12,47 @@ class ChangeWatcher
 {
     private string $checksumFile;
     private string $commitLogFile;
+    private FileInterface $changelogFile;
 
     /**
      * ChangeWatcher constructor.
      */
-    public function __construct()
+    public function __construct(FileInterface $file)
     {
+        $this->changelogFile = $file;
         $this->commitLogFile = getcwd() . '/.clc.version';
         $this->checksumFile = getcwd() . '/.clc.checksum';
     }
 
 
-    public function changelogChangedSinceLastCommits(File $file, int $commits): bool
+    public function changelogChangedSinceLastCommits(int $commits): bool
     {
         $command = sprintf('git log --oneline -n %d', $commits);
         $commits = shell_exec($command);
         $lastResult = $this->getLastCommit();
         if (!strpos($commits, $lastResult)) {
-            return $this->changelogChanged($file);
+            return $this->changelogChanged();
         }
         return true;
     }
 
-    private function changelogChanged(File $file): bool
+    private function changelogChanged(): bool
     {
-        $currentChecksum = $file->getHash();
+        $currentChecksum = $this->changelogFile->getHash();
         $lastChecksum = $this->getLastChangelogHash();
         if (trim($lastChecksum) !== trim($currentChecksum)) {
+            $this->setChangelogChanged();
             return true;
         }
         return false;
     }
 
-    private function setChangelogChanged(File $file)
+    private function setChangelogChanged()
     {
         $command = 'git log --oneline -n 1';
         $result = shell_exec($command);
         file_put_contents($this->commitLogFile, trim($result));
-        file_put_contents($this->checksumFile, $file->getHash());
+        file_put_contents($this->checksumFile, $this->changelogFile->getHash());
     }
 
 

@@ -29,7 +29,7 @@ class CommitManager
         $commits = shell_exec($command);
         $commitArray = explode(PHP_EOL, $commits);
         $commitArray = array_filter($commitArray);
-        return array_map(fn ($commit) => "- $commit", $commitArray);
+        return array_map(fn($commit) => "- $commit", $commitArray);
     }
 
     public function hasFixedCommits(): bool
@@ -45,11 +45,10 @@ class CommitManager
         return $commits;
     }
 
-    public function getLineToAddCommits()
+    public function getLineToAddCommits(): ?int
     {
-        $hasFixedCommits = strpos($this->changelogFile->getContents(), self::COMMIT_TITLE) !== false;
         foreach ($this->changelogFile as $line) {
-            if ($hasFixedCommits) {
+            if ($this->hasFixedCommits()) {
                 if (strpos($line, self::COMMIT_TITLE) !== false) {
                     $lineIndex = $this->changelogFile->key() + 1;
                     break;
@@ -62,5 +61,15 @@ class CommitManager
             }
         }
         return $lineIndex ?? null;
+    }
+
+    public function filterCommitsAlreadyInChangelog(array $commits): array
+    {
+        foreach ($commits as $key => $commit) {
+            if (strpos($this->changelogFile->getContents(), $commit)) {
+                unset($commits[$key]);
+            }
+        }
+       return array_filter($commits);
     }
 }
