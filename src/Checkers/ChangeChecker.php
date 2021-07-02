@@ -62,7 +62,7 @@ class ChangeChecker extends AbstractChecker
         $commits = $commitManager->filterCommitsAlreadyInChangelog($commits);
         if (!empty($commits)) {
             array_push($commits, '');
-            // $this->file->includeLinesAfter($commits, $lineIndex);
+            $this->file->includeLinesAfter($commits, $lineIndex);
             $message = sprintf(
                 'Added commit changes "%s" to line %s',
                 $lineIndex,
