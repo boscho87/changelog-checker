@@ -42,7 +42,6 @@ class ChangeChecker extends AbstractChecker
 
     protected function fix(): void
     {
-        return;
         $this->commitManager = new CommitManager($this->file);
         ;
         $failAfterXCommits = $this->options->fail_after;
