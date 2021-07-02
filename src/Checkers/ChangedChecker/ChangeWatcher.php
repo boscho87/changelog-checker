@@ -35,7 +35,7 @@ class ChangeWatcher
 
     private function changelogChanged(File $file): bool
     {
-        $currentChecksum = md5($file->getContents());
+        $currentChecksum = $file->getHash();
         $lastChecksum = $this->getLastChangelogHash();
         if (trim($lastChecksum) !== trim($currentChecksum)) {
             return true;
