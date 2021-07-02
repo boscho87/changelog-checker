@@ -36,10 +36,9 @@ class DefaultChecker extends AbstractChecker
 
     protected function fix(): void
     {
-        $contents = preg_replace('/\n{2,}/', '', $this->file->getContents());
-        var_dump($contents);
+        $contents = preg_replace('/\n{2,}/', PHP_EOL.PHP_EOL, $this->file->getContents());
         if ($contents !== $this->file->getContents()) {
-            //    $this->file->setNewContent($contents);
+            $this->file->setNewContent($contents);
             $this->addFixedMessage('Replaced all double line breaks with only one');
         }
 

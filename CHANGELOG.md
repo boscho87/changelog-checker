@@ -5,20 +5,15 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-### Committed
-- 9abef93 WIP: rewoke the IncreasedChecker
-- 90348c1 WIP: Fix IncreaseChecker
-- 685a4e9 Implement Increase fix
+
 ### Added
 - Change command name from `clc-validate` to `validate`
-- Add Default Checker
+- Add Default Checker to Replace spaces and empty lines
 - Added Fix for Increased Checker
 
 ## [1.0.0] - 2021-06-28
 ### Added
-- Added Changelog Checkers
-
-## [0.0.4] - 2021-06-27
+- Added Changelog Checkers## [0.0.4] - 2021-06-27
 ### Added
 - Created Repository
 - Basic setup and Configuration
@@ -36,9 +31,6 @@ to [Semantic Versioning](http://semver.org/).
 ## [0.0.1] - 2021-06-27
 ### Added
 - Create Project
-
-
-
 
 [Unreleased]: https://github.com/boscho87/changelog-checker/compare/0.0.4...master
 [1.0.0]: https://github.com/boscho87/changelog-checker/compare/0.0.4...1.0.0

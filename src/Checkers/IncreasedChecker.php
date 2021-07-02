@@ -38,20 +38,14 @@ class IncreasedChecker extends AbstractChecker
 
     protected function fix(): void
     {
-        if ($this->changelogChanged()) {
+        if ($this->lastChangeInValidRange()) {
             return;
         }
+
         $committedTitle = '### Committed';
         $failAfterXCommits = $this->options->fail_after;
         $command = sprintf('git log --oneline -n %d', $failAfterXCommits);
         $commits = shell_exec($command);
-        $lines = array_filter(explode(PHP_EOL, $commits));
-        $newestCommit = $lines[0] ?? '';
-        $commitLog = $this->getCommitLog();
-        $position = strpos($commitLog, $newestCommit);
-        if ($position > 0) {
-            return;
-        }
         $commitArray = explode(PHP_EOL, $commits);
         $commitArray = array_filter($commitArray);
         $commitArray = array_map(fn ($commit) => "- $commit", $commitArray);
@@ -59,20 +53,7 @@ class IncreasedChecker extends AbstractChecker
         if (!empty($commitArray) && !$hasFixedCommits) {
             array_unshift($commitArray, $committedTitle);
         }
-
-        foreach ($this->file as $line) {
-            if ($hasFixedCommits) {
-                if (strpos($line, $committedTitle) !== false) {
-                    $lineIndex = $this->file->key() + 1;
-                    break;
-                }
-                continue;
-            }
-            if (strpos($line, '[Unreleased]')) {
-                $lineIndex = $this->file->key() + 2;
-                break;
-            }
-        }
+        $lineIndex = $this->getLineToAddCommits($committedTitle);
         if (!isset($lineIndex)) {
             $this->addErrorMessage(
                 sprintf(
@@ -82,12 +63,7 @@ class IncreasedChecker extends AbstractChecker
             );
             return;
         }
-        $message = sprintf(
-            'Added commit changes "%s" to line %s',
-            $lineIndex,
-            $this->file->lineNumber()
-        );
-        $this->addFixedMessage($message);
+
         foreach ($commitArray as $key => $commit) {
             if (strpos($this->file->getContents(), $commit)) {
                 unset($commitArray[$key]);
@@ -96,8 +72,14 @@ class IncreasedChecker extends AbstractChecker
         $commitArray = array_filter($commitArray);
         if (!empty($commitArray)) {
             $this->file->includeLinesAfter($commitArray, $lineIndex);
+            $message = sprintf(
+                'Added commit changes "%s" to line %s',
+                $lineIndex,
+                $this->file->lineNumber()
+            );
+            $this->addFixedMessage($message);
+            $this->setChangelogChanged();
         }
-        $this->setChangelogChanged();
     }
 
 
@@ -142,5 +124,25 @@ class IncreasedChecker extends AbstractChecker
             $lastResult = file_get_contents($this->commitLogFile);
         }
         return $lastResult ?? '';
+    }
+
+
+    protected function getLineToAddCommits(string $committedTitle): ?int
+    {
+        $hasFixedCommits = strpos($this->file->getContents(), $committedTitle) !== false;
+        foreach ($this->file as $line) {
+            if ($hasFixedCommits) {
+                if (strpos($line, $committedTitle) !== false) {
+                    $lineIndex = $this->file->key() + 1;
+                    break;
+                }
+                continue;
+            }
+            if (strpos($line, '[Unreleased]')) {
+                $lineIndex = $this->file->key() + 2;
+                break;
+            }
+        }
+        return $lineIndex ?? null;
     }
 }
