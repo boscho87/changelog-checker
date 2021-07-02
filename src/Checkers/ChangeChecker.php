@@ -7,16 +7,16 @@ use Boscho87\ChangelogChecker\Checkers\ChangedChecker\CommitManager;
 use Boscho87\ChangelogChecker\Options\Option;
 
 /**
- * Class IncreasedChecker
+ * Class ChangeChecker
  */
-class IncreasedChecker extends AbstractChecker
+class ChangeChecker extends AbstractChecker
 {
     private int $failAfterXCommits;
     private ChangeWatcher $changeWatcher;
     private CommitManager $commitManager;
 
     /**
-     * IncreasedChecker constructor.
+     * ChangeChecker constructor.
      */
     public function __construct(Option $options)
     {

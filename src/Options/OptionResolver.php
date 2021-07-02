@@ -3,7 +3,7 @@
 namespace Boscho87\ChangelogChecker\Options;
 
 use Boscho87\ChangelogChecker\Checkers\DefaultChecker;
-use Boscho87\ChangelogChecker\Checkers\IncreasedChecker;
+use Boscho87\ChangelogChecker\Checkers\ChangeChecker;
 use Boscho87\ChangelogChecker\Checkers\LinkChecker;
 use Boscho87\ChangelogChecker\Checkers\SequenceChecker;
 use Boscho87\ChangelogChecker\Checkers\TypeChecker;
@@ -37,7 +37,7 @@ class OptionResolver
             new BracketChecker($this->loader->versionBrackets), // this should run second
             new AscendingVersionChecker($this->loader->ascendingVersion),
             new TypeChecker($this->loader->actions),
-            new IncreasedChecker($this->loader->increased),
+            new ChangeChecker($this->loader->increased),
             new LinkChecker($this->loader->linkChecker)
         ];
 
