@@ -2,7 +2,7 @@
   "name": "boscho87/changelog-checker",
   "version": "1.2.0",
   "license": "MIT",
-  "description": "Tool to Validate Changelog formats",
+  "description": "Tool to validate the CHANGELOG.md format with the \"keep a changelog\" instructions",
   "type": "library",
   "require-dev": {
     "phpunit/phpunit": "^9.5"
@@ -21,8 +21,7 @@
   ],
   "require": {
     "symfony/console": "^5.3",
-    "friendsofphp/php-cs-fixer": "^3.0",
-    "tigitz/php-spellchecker": "^0.2.0"
+    "friendsofphp/php-cs-fixer": "^3.0"
   },
   "bin": [
     "bin/changelog-checker"

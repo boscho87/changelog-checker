@@ -12,6 +12,7 @@ use Boscho87\ChangelogChecker\Checkers\BracketChecker;
 use Boscho87\ChangelogChecker\Checkers\Checkable;
 
 /**
+ * @codeCoverageIgnore
  * Class OptionResolver
  */
 class OptionResolver
