@@ -56,6 +56,7 @@ class CreateReleaseCommand extends Command
         $bugfix = $majorMinorBugfix[2];
         $release = sprintf('%d.%d.%d', $major, $minor, $bugfix);
 
+
         foreach ($changelogFile as $line) {
             if (strpos($line, '[Unreleased]')) {
                 $lineAfterUnreleased = $changelogFile->getLine($changelogFile->lineNumber());
@@ -75,6 +76,8 @@ class CreateReleaseCommand extends Command
             if ($composerContent !== $replaced) {
                 file_put_contents($composerFile, $replaced);
                 $style->info('Updated composer File');
+            } else {
+                $style->info('Version in comopser.json not found (absolutely normal if you not implement open Source Libraries or something like that');
             }
         }
 
@@ -95,19 +98,22 @@ class CreateReleaseCommand extends Command
             }
         }
 
-        
+
         $changelogFile->write();
 
-        $commands = [
-            'git add .',
-            sprintf('git commit -m "Release: %s"', $release),
-            sprintf('git tag %s', $release),
-        ];
-
-        foreach ($commands as $command) {
-            $result = shell_exec($command);
-            $style->newLine();
-            $style->info(sprintf('execute: %s, result: %s', $command, $result));
+        if (shell_exec('which git')) {
+            $commands = [
+                'git add .',
+                sprintf('git commit -m "Release: %s"', $release),
+                sprintf('git tag %s', $release),
+            ];
+            foreach ($commands as $command) {
+                $result = shell_exec($command);
+                $style->newLine();
+                $style->info(sprintf('execute: %s, result: %s', $command, $result));
+            }
+        } else {
+            $style->info('Did not Create git tags, git missing?');
         }
 
 

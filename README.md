@@ -12,7 +12,7 @@ This tool should only be used in development environments.
 #### Requirements
 
 - \> php7.4
-- some checks require git
+- some checks and actions requires git
 
 ### Installation
 
@@ -26,7 +26,7 @@ echo .gitignore >> .clc.*
 echo .gitignore >> tools/changelog-checker/vendor
 ```
 
-### Execute the Command
+### Execute the Commands
 
 ```shell
 ### With default config (or own config file) if your Changelog name is CHANGELOG.md
@@ -39,6 +39,8 @@ echo .gitignore >> tools/changelog-checker/vendor
 /tools/changelog-checker/vendor/bin/changelog-checker clc:validate --with-fix=1
 ### Force (overwrite the configs) to not Fix the Problems
 /tools/changelog-checker/vendor/bin/changelog-checker clc:validate --with-fix=0
+### Create a new Release (from the Unreleased Section) - ALPHA FEATURE
+/tools/changelog-checker/vendor/bin/changelog-checker release
 ```
 
 ### Config
@@ -87,7 +89,11 @@ return [
 ];
 ```
 
-### Checkers
+### Releaser (`release` command)
+
+- Creates a new Release including the Git Tag
+
+### Checkers (`validate` command)
 
 This Checks are Implemented and can be activated
 
@@ -131,3 +137,5 @@ This Checks are Implemented and can be activated
 - Implement more fix methods (where possible)
 - Implement tests for all "Checkers"
 - Refactor the Checker, after tests are written
+- Refactor the CreateRelease Command
+- Check Support for alpha/beta etc. Releases and Versions
