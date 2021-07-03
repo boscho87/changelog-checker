@@ -7,7 +7,8 @@ namespace Boscho87\ChangelogChecker\Checkers;
  */
 class TypeChecker extends AbstractChecker
 {
-    private array $allowedTypes = ['Added', 'Changed', 'Deprecated', 'Removed', 'Fixed', 'Security'];
+    //Todo move this to mor generic place
+    public static array $allowedTypes = ['Added', 'Changed', 'Deprecated', 'Removed', 'Fixed', 'Security'];
 
 
     protected function check(): void
@@ -16,12 +17,12 @@ class TypeChecker extends AbstractChecker
             if ($this->isTypeLine($line)) {
                 preg_match($this->getAllowedTypePattern(), $line, $matches);
                 $typeString = $matches[2] ?? '';
-                if (!in_array($typeString, $this->allowedTypes)) {
+                if (!in_array($typeString, self::$allowedTypes)) {
                     $this->addErrorMessage(sprintf(
                         'Line %s has invalid Type: "%s", allowed are %s',
                         $this->file->lineNumber(),
                         $line,
-                        implode(',', $this->allowedTypes)
+                        implode(',', self::$allowedTypes)
                     ));
                 }
             }
@@ -36,7 +37,7 @@ class TypeChecker extends AbstractChecker
 
     private function getAllowedTypePattern(): string
     {
-        $types = implode('|', $this->allowedTypes);
+        $types = implode('|', self::$allowedTypes);
         return sprintf('/(###\s)(%s)$/', $types);
     }
 }
