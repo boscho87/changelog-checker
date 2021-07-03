@@ -30,6 +30,9 @@ class ChangeWatcher
         $command = sprintf('git log --oneline -n %d', $commits);
         $commits = shell_exec($command);
         $lastResult = $this->getLastCommit();
+        if (!$lastResult) {
+            $this->setChangelogChanged();
+        }
         if (!strpos($commits, $lastResult)) {
             $this->setChangelogChanged();
             return $this->changelogChanged();
