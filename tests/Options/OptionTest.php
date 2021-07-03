@@ -41,6 +41,17 @@ class OptionTest extends BaseTestCase
                     'odd-stuff' => true,
                 ],
             ],
+            [
+                [
+                    'check' => false,
+                    'error' => false,
+                    'fix' => false,
+                    'odd-stuff' => false,
+                    'wired-stuff' => 'as a string',
+                    'wired-stuff-int' => 4,
+                    'wired-stuff-array' => [4,4,4,4],
+                ],
+            ]
         ];
     }
 }
