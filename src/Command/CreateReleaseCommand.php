@@ -11,7 +11,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Todo refactor and extract Classes and methods
-     * @codeCoverageIgnore
+ * @codeCoverageIgnore
  * Class CreateReleaseCommand
  */
 class CreateReleaseCommand extends Command
@@ -40,6 +40,12 @@ class CreateReleaseCommand extends Command
             'Composer File Path',
             'composer.json'
         );
+        $this->addArgument(
+            'commit',
+            null,
+            'should the command create a git tag, after the changelog is up to date',
+            false
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -47,6 +53,7 @@ class CreateReleaseCommand extends Command
         $style = new SymfonyStyle($input, $output);
         $changelogPath = realpath($input->getOption('changelog-file'));
         $composerFile = realpath($input->getOption('composer-file'));
+        $shouldCommit = $input->getArgument('commit');
         $changelogFile = new File($changelogPath);
         $changelogFile->writeBackup();
         preg_match_all('/\[(\d+\.\d+\.\d+)\]\s/', $changelogFile->getContents(), $versions);
@@ -102,7 +109,12 @@ class CreateReleaseCommand extends Command
 
         $changelogFile->write();
 
-        if (shell_exec('which git')) {
+        $hasGit = shell_exec('which git');
+        if (!$hasGit) {
+            $style->info('Did not Create git tags, git missing?');
+        }
+
+        if ($shouldCommit && !$hasGit) {
             $commands = [
                 'git add .',
                 sprintf('git commit -m "Release: %s"', $release),
@@ -113,8 +125,6 @@ class CreateReleaseCommand extends Command
                 $style->newLine();
                 $style->info(sprintf('execute: %s, result: %s', $command, $result));
             }
-        } else {
-            $style->info('Did not Create git tags, git missing?');
         }
 
 
