@@ -95,8 +95,7 @@ class CreateReleaseCommand extends Command
             }
         }
 
-
-        echo $changelogFile->getContents();
+        
         $changelogFile->write();
 
         $commands = [
@@ -107,6 +106,7 @@ class CreateReleaseCommand extends Command
 
         foreach ($commands as $command) {
             $result = shell_exec($command);
+            $style->newLine();
             $style->info(sprintf('execute: %s, result: %s', $command, $result));
         }
 
