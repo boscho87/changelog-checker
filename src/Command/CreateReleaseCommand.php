@@ -60,7 +60,8 @@ class CreateReleaseCommand extends Command
             if (strpos($line, '[Unreleased]')) {
                 $lineAfterUnreleased = $changelogFile->getLine($changelogFile->lineNumber());
                 if (empty($lineAfterUnreleased)) {
-                    throw new \Exception('invalid Changelog format, the unreleased section is empty');
+                    //todo check specific for One of the allowed verbs -> KeepAChangelog (Added,Fixed.....)
+                    throw new \Exception('invalid Changelog format, the unreleased section is empty (or the line underneath is missing)');
                 }
                 $date = date('Y-m-d');
                 $changelogFile->includeLinesAfter(['', sprintf('## [%s] - %s', $release, $date)]);
