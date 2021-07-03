@@ -11,6 +11,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Todo refactor and extract Classes and methods
+     * @codeCoverageIgnore
  * Class CreateReleaseCommand
  */
 class CreateReleaseCommand extends Command

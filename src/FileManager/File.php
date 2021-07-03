@@ -2,8 +2,6 @@
 
 namespace Boscho87\ChangelogChecker\FileManager;
 
-use Boscho87\ChangelogChecker\Exception\FileNotFoundException;
-
 /**
  * Class File
  */
