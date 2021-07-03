@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
+ * Todo refactor and extract Classes and methods
  * Class CreateReleaseCommand
  */
 class CreateReleaseCommand extends Command
@@ -47,22 +48,66 @@ class CreateReleaseCommand extends Command
         $composerFile = realpath($input->getOption('composer-file'));
         $changelogFile = new File($changelogPath);
         $changelogFile->writeBackup();
-        $release = '1.1.0'; // get from Changelog
-        //get last version from the changelog
-        //increase it by one minor step
-        // move all unreleased entries to the new version section
-        //modify the unreleased link (get current base git url)
-        // add the new version link
+        preg_match_all('/\[(\d+\.\d+\.\d+)\]\s/', $changelogFile->getContents(), $versions);
+        $lastVersion = $versions[1][0] ?? null;
+        $majorMinorBugfix = explode('.', $lastVersion);
+        $major = $majorMinorBugfix[0];
+        $minor = $majorMinorBugfix[1] + 1;
+        $bugfix = $majorMinorBugfix[2];
+        $release = sprintf('%d.%d.%d', $major, $minor, $bugfix);
+
+        foreach ($changelogFile as $line) {
+            if (strpos($line, '[Unreleased]')) {
+                $lineAfterUnreleased = $changelogFile->getLine($changelogFile->lineNumber());
+                if (empty($lineAfterUnreleased)) {
+                    throw new \Exception('invalid Changelog format, the unreleased section is empty');
+                }
+                $date = date('Y-m-d');
+                $changelogFile->includeLinesAfter(['', sprintf('## [%s] - %s', $release, $date)]);
+                break;
+            }
+        }
+
         if ($composerFile) {
             $composerContent = file_get_contents($composerFile);
-            $replaced = preg_replace('/"version":"\d+.\d+.\d+"/', '"version": "4.0.0"', $composerContent);
+            $replaced = preg_replace('/"version":"\d+\.\d+\.\d+"/', sprintf('"version": "%s"', $release), $composerContent);
             if ($composerContent !== $replaced) {
                 file_put_contents($composerFile, $replaced);
                 $style->info('Updated composer File');
             }
         }
-        //git commit with release message
-        //git create tag
+
+
+        foreach ($changelogFile as $line) {
+            if (strpos($line, '[Unreleased]: ') !== false) {
+                $updatedUnreleasedLink = str_replace($lastVersion . '...', $release . '...', $line);
+                $changelogFile->setLine($updatedUnreleasedLink);
+                continue;
+            }
+            if (strpos($line, sprintf('[%s]: ', $lastVersion)) !== false) {
+                $oldLine = $line;
+                $changelogFile->includeLinesAfter([$oldLine]);
+                $line = str_replace($lastVersion, $release, $line);
+                $line = preg_replace('/\d+\.\d+\.\d+\.\.\./', $lastVersion . '...', $line);
+                $changelogFile->setLine($line);
+                break;
+            }
+        }
+
+
+        echo $changelogFile->getContents();
+        $changelogFile->write();
+
+        $commands = [
+            'git add .',
+            sprintf('git commit -m "Release: %s"', $release),
+            sprintf('git tag %s', $release),
+        ];
+
+        foreach ($commands as $command) {
+            $result = shell_exec($command);
+            $style->info(sprintf('execute: %s, result: %s', $command, $result));
+        }
 
 
         $style->success(sprintf(
