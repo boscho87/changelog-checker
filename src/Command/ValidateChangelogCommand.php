@@ -18,10 +18,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class ValidateChangelogCommand extends Command
 {
+    public const COMMAND_NAME = 'validate';
+
     /**
      * ValidateChangelogCommand constructor.
      */
-    public function __construct($name = 'validate')
+    public function __construct($name = self::COMMAND_NAME)
     {
         parent::__construct($name);
     }
