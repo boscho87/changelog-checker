@@ -18,9 +18,11 @@ return [
         'fix' => false,
     ],
     'increased' => [
-        'check' => false,
+        'check' => true,
         'error' => true,
         'fix' => false,
+        //commits allowed without a changelog change
+        'fail_after' => 4,
     ],
     'sequence' => [
         'check' => true,

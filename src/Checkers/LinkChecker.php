@@ -17,7 +17,8 @@ class LinkChecker extends AbstractChecker
             return;
         }
         $versions = [];
-        foreach ($versionTags[0] as $tag) {
+        $versionTags = array_reverse($versionTags[0]);
+        foreach ($versionTags as $tag) {
             if (!in_array($tag, $versions)) {
                 $pattern = preg_replace('/\[/', '\[', $tag);
                 $pattern = preg_replace('/\]/', '\]', $pattern);

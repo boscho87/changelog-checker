@@ -14,7 +14,7 @@ abstract class AbstractChecker
     private array $warnings = [];
     private array $errors = [];
     private array $fixed = [];
-    private Option $options;
+    protected Option $options;
 
     /**
      * AbstractChecker constructor.
@@ -69,16 +69,6 @@ abstract class AbstractChecker
     public function getFixed(): array
     {
         return array_reverse($this->fixed);
-    }
-
-    protected function currentVersion(): string
-    {
-        preg_match('/\d+\.\d+\.\d+/', $this->file->getContents(), $matches);
-        var_dump($matches);
-        die();
-        if ($matches) {
-            return $matches;
-        }
     }
 
     protected function isVersionLine(string $line): bool

@@ -21,7 +21,7 @@ class ValidateChangelogCommand extends Command
     /**
      * ValidateChangelogCommand constructor.
      */
-    public function __construct($name = 'clc:validate')
+    public function __construct($name = 'validate')
     {
         parent::__construct($name);
     }

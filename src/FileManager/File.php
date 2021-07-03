@@ -21,27 +21,10 @@ class File implements FileInterface
      */
     public function __construct(string $path)
     {
-        try {
-            $path = realpath($path);
-            $this->filePath = $path;
-            $this->content = file_get_contents($path);
-            $handle = @fopen($path, "r");
-            if ($handle) {
-                while (($buffer = fgets($handle)) !== false) {
-                    $this->lines[] = trim($buffer);
-                }
-                if (!feof($handle)) {
-                    echo "Fehler: unerwarteter fgets() Fehlschlag\n";
-                }
-                fclose($handle);
-            }
-        } catch (\Throwable $throwable) {
-            throw new FileNotFoundException(sprintf(
-                'File %s not found Error:{%s}',
-                $path,
-                $throwable->getMessage()
-            ));
-        }
+        $path = realpath($path);
+        $this->filePath = $path;
+        $content = file_get_contents($path);
+        $this->setNewContent($content);
     }
 
     public function getContents(): string
@@ -84,14 +67,18 @@ class File implements FileInterface
         $this->currentLine = 0;
     }
 
+    /**
+     * @return int File line number is not the array index of line!
+     */
     public function lineNumber(): int
     {
         return $this->key() + 1;
     }
 
-    public function setLine(string $content, int $key)
+    public function setLine(string $content, int $key = null): void
     {
-        $this->lines[$key] = $content;
+        $line = $key ?? $this->lineNumber() - 1;
+        $this->lines[$line] = $content;
         $this->content = implode(PHP_EOL, $this->lines);
     }
 
@@ -100,8 +87,9 @@ class File implements FileInterface
         $lastLine = count($this->lines) - 1;
         $lastLineContent = $this->lines[$lastLine];
         if (!empty($lastLineContent)) {
-            $this->setLine('', $lastLine);
+            $this->setLine('', $lastLine + 1);
         }
+
         file_put_contents($this->filePath, $this->content);
     }
 
@@ -134,5 +122,25 @@ class File implements FileInterface
             array_pop($backupFiles);
             unlink($backupFiles[$index]);
         }
+    }
+
+    public function setNewContent(string $contents)
+    {
+        $this->content = $contents;
+        $this->lines = explode(PHP_EOL, $contents);
+    }
+
+    public function includeLinesAfter(array $lines, int $key = null)
+    {
+        $fileLines = $this->lines;
+        $line = $key ?? $this->lineNumber();
+        array_splice($fileLines, $line, 0, $lines);
+        $this->lines = $fileLines;
+        $this->content = implode(PHP_EOL, $this->lines);
+    }
+
+    public function getHash(): string
+    {
+        return md5($this->getContents());
     }
 }
