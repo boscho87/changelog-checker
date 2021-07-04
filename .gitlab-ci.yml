@@ -28,6 +28,7 @@ deploy_live_prepare:
     - echo $($CI_PROJECT_DIR/_ci/current_changes.sh) #create changes.txt
     - cat changes.txt
   script:
+    - ./_ci/cs_fixer.sh
     - php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-text --colors=never --group unit,database
   artifacts:
     paths:

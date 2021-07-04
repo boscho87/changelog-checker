@@ -1,6 +1,6 @@
 #!/bin/bash
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-dir=$script_dir/../
+dir=$script_dir/..
 csfixer=$dir/tools/php-cs-fixer/vendor/bin/php-cs-fixer
 $csfixer fix $dir/tests --using-cache=no --diff
 $csfixer fix $dir/src --dry-run --using-cache=no --diff
