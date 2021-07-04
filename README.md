@@ -20,17 +20,18 @@ Best practice: Install in a subdirectory to avoid dependency Problems
 
 ```shell
 mkdir --parents tools/changelog-checker
+## install in working dir
 composer require --working-dir=tools/changelog-checker boscho87/changelog-checker
 ## ignore backup files
-echo .gitignore >> .clc.*
-echo .gitignore >> tools/changelog-checker/vendor
+echo  .clc.* >> .gitignore 
+echo  tools/changelog-checker/vendor >> .gitignore
 ```
 
 ### Execute the Commands
 
 ```shell
 ### With default config (or own config file) if your Changelog name is CHANGELOG.md
-/tools/changelog-checker/vendor/bin/changelog-checker clc:validate
+/tools/changelog-checker/vendor/bin/changelog-checker clc:validate # uses the Changelog and config file from the dir, the command is executed
 ### Define the Changelog File
 /tools/changelog-checker/vendor/bin/changelog-checker clc:validate -f CHANGELOG.md
 ### Define the config File
@@ -40,7 +41,13 @@ echo .gitignore >> tools/changelog-checker/vendor
 ### Force (overwrite the configs) to not Fix the Problems
 /tools/changelog-checker/vendor/bin/changelog-checker clc:validate --with-fix=0
 ### Create a new Release (from the Unreleased Section) - ALPHA FEATURE
-/tools/changelog-checker/vendor/bin/changelog-checker release
+/tools/changelog-checker/vendor/bin/changelog-checker release # uses the Changelog and composer.json from the dir, the command is executed
+### Set a specific  Changelog.md file
+/tools/changelog-checker/vendor/bin/changelog-checker release -f CHANGELOG.md
+### Set a specific composer.json file 
+/tools/changelog-checker/vendor/bin/changelog-checker release -c composer.json
+### Commit the Updated Changelog and create a git tag (requires git)
+/tools/changelog-checker/vendor/bin/changelog-checker release commit
 ```
 
 ### Config
