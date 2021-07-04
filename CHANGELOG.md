@@ -7,6 +7,7 @@ to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added test Cases
 - Updated Create Release Command
+- Refactored the Checkers after test Updates
 
 ## [1.2.0] - 2021-07-03
 ### Added

@@ -109,7 +109,7 @@ class FileTest extends BaseTestCase
     public function testToIncludeLinesAfterASpecificLine(): void
     {
         $file = new File($this->keepAChangelogPath);
-        $lineOneZeroThree = '- Markdown links to version tags on release headings.';
+        $lineOneZeroThree = '- Unreleased section to gather unreleased changes and encourage note';
         $this->assertEquals($lineOneZeroThree, $file->getLine(102));
         $file->includeLinesAfter(['- This Changelog Message'], 102);
         $this->assertEquals($lineOneZeroThree, $file->getLine(103));

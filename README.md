@@ -136,7 +136,7 @@ This Checks are Implemented and can be activated
 
 - Check if the Changelog has Links at the and of the File (Version Brackets are Required for this)
 - Fix > (Not Yet Implemented)
-- requires `git`  (git )
+- requires `git`
 
 ### Roadmap
 
