@@ -10,6 +10,8 @@ php_test:
     - ./_ci/install_php.sh
   script:
     - ./_ci/cs_fixer.sh
+    - composer install
+    - composer --working-dir=tools/php-cs-fixer install
     - php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-text --colors=never --group unit,database
   except:
     - master
@@ -21,6 +23,8 @@ deploy_live_prepare:
   before_script:
     - $CI_PROJECT_DIR/_ci/version_tag_check.sh
     - ./_ci/install_php.sh
+    - composer install
+    - composer --working-dir=tools/php-cs-fixer install
     - echo $($CI_PROJECT_DIR/_ci/current_changes.sh) #create changes.txt
     - cat changes.txt
   script:

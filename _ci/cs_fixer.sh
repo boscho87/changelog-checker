@@ -1,13 +1,13 @@
 #!/bin/bash
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 dir=$script_dir/../
-
-./vendor/bin/php-cs-fixer fix $dir/tests --using-cache=no --diff
-./vendor/bin/php-cs-fixer fix $dir/src --dry-run --using-cache=no --diff
+csfixer=$dir/tools/php-cs-fixer/vendor/bin/php-cs-fixer
+$csfixer fix $dir/tests --using-cache=no --diff
+$csfixer fix $dir/src --dry-run --using-cache=no --diff
 if [ "$?" != 0 ]
 then
-./vendor/bin/php-cs-fixer fix $dir/tests --using-cache=no --diff
-./vendor/bin/php-cs-fixer fix $dir/src --using-cache=no --diff
+$csfixer fix $dir/tests --using-cache=no --diff
+$csfixer fix $dir/src --using-cache=no --diff
     exit 100
 fi
 
