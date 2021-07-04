@@ -1,5 +1,12 @@
 # Changelog Checker &copy; Boscho87
 
+##### Master:
+[![pipeline status](https://gitlab.com/itscoding/changelog-checker/badges/master/pipeline.svg)](https://gitlab.com/itscoding/changelog-checker/commits/master)  
+[![coverage report](https://gitlab.com/itscoding/changelog-checker/badges/master/coverage.svg)](https://gitlab.com/itscoding/changelog-checker/commits/master)
+
+
+
+
 Check if the Changelog has proper format, and if it was updated since the last commit. Some problems can be fixed by the
 tool if you want (see more in configs)
 
