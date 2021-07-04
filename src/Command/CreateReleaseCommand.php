@@ -12,7 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Todo refactor and extract Classes and methods
  * @codeCoverageIgnore
  * Class CreateReleaseCommand
  */
@@ -79,7 +78,7 @@ class CreateReleaseCommand extends Command
             $style->info('Did not Create git tags, git missing?');
         }
 
-        if ($shouldCommit && !$hasGit) {
+        if ($shouldCommit && $hasGit) {
             $commands = [
                 'git add .',
                 sprintf('git commit -m "Release: %s"', $newVersion),

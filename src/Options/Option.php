@@ -15,7 +15,7 @@ class Option
     /**
      * Option constructor.
      */
-    public function __construct(bool $check, bool $error, bool $fix, array $configs)
+    public function __construct(bool $check, bool $error, bool $fix, array $configs = [])
     {
         $this->check = $check;
         $this->error = $error;

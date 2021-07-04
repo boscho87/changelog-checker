@@ -31,7 +31,7 @@ class TypeChecker extends AbstractChecker
 
     protected function fix(): void
     {
-        // TODO: Implement fix() method.
+        //no fix possible for this case
     }
 
 

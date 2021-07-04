@@ -7,4 +7,5 @@ namespace Boscho87\ChangelogChecker\Composer;
  */
 final class Regex
 {
+    public const COMPOSER_VERSION = '/"version":"\d+\.\d+\.\d+"/';
 }

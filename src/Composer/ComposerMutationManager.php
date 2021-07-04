@@ -12,7 +12,7 @@ class ComposerMutationManager
     public function replaceComposerVersion(string $composerFilePath, string $newVersion): bool
     {
         $composerContent = file_get_contents($composerFilePath);
-        $replaced = preg_replace('/"version":"\d+\.\d+\.\d+"/', sprintf('"version": "%s"', $newVersion), $composerContent);
+        $replaced = preg_replace(Regex::COMPOSER_VERSION, sprintf('"version": "%s"', $newVersion), $composerContent);
         if ($composerContent !== $replaced) {
             file_put_contents($composerFilePath, $replaced);
             return true;
