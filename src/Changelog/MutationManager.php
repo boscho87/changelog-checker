@@ -28,9 +28,19 @@ class MutationManager
     }
 
 
+    public function getAllTitleVersionTags(): array
+    {
+        preg_match_all(Regex::VERSION_TITLE_PATTERN, $this->changelogFile->getContents(), $versionTags);
+        if (!is_array($versionTags) || !array_key_exists(1, $versionTags)) {
+            return [];
+        }
+        return array_reverse($versionTags[1]);
+    }
+
+
     public function getLastVersion(): ?string
     {
-        preg_match_all(Regex::VERSION_TITLE, $this->changelogFile->getContents(), $versions);
+        preg_match_all(Regex::VERSION_TITLE_PATTERN, $this->changelogFile->getContents(), $versions);
         return $versions[1][0] ?? null;
     }
 
