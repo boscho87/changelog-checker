@@ -7,9 +7,9 @@ use Boscho87\ChangelogChecker\FileManager\FileInterface;
 use Boscho87\tests\BaseTestCase;
 
 /**
- * Class AbstractTypeCheckerTest
+ * Class AbstractCheckerTest
  */
-abstract class AbstractTypeCheckerTest extends BaseTestCase
+abstract class AbstractCheckerTest extends BaseTestCase
 {
     protected const CHANGELOG_FILE_PATH = __DIR__ . '/../MockFiles/changelog-examples/KeepaChangelog.md';
 

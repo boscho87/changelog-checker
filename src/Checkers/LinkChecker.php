@@ -16,7 +16,6 @@ class LinkChecker extends AbstractChecker
                 $pattern = preg_replace('/\[/', '\[', $tag);
                 $pattern = preg_replace('/\]/', '\]', $pattern);
                 $pattern = preg_replace('/\./', '\.', $pattern);
-                $pattern = preg_replace('/\s/', '', $pattern);
                 $pattern = sprintf('/(%s)\: (https:\/\/)/', $pattern);
                 preg_match($pattern, $this->file->getContents(), $link);
                 if (!array_key_exists(0, $link)) {

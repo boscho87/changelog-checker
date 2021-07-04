@@ -6,9 +6,9 @@ use Boscho87\ChangelogChecker\Checkers\TypeChecker;
 use Boscho87\ChangelogChecker\Options\Option;
 
 /**
- * Class TypeCheckerTest
+ * Class CheckerTest
  */
-class TypeCheckerTest extends AbstractTypeCheckerTest
+class CheckerTest extends AbstractCheckerTest
 {
     /**
      * @group unit

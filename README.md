@@ -138,5 +138,4 @@ This Checks are Implemented and can be activated
 - Implement tests for all "Checkers"
 - Refactor the Checker, after tests are written
 - Refactor the CreateRelease Command
-- Create A Class or A little library to manage all the regex patterns  
 - Check Support for alpha/beta etc. Releases and Versions

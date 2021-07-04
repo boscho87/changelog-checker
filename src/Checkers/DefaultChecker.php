@@ -17,13 +17,13 @@ class DefaultChecker extends AbstractChecker
 
     protected function check(): void
     {
-        $contents = preg_replace('/\n{2,}/', '', $this->file->getContents());
+        $contents = preg_replace('/\n{2,}/', PHP_EOL.PHP_EOL, $this->file->getContents());
         if ($contents !== $this->file->getContents()) {
             $this->addErrorMessage('There should never been more than one linebreak');
         }
 
         foreach ($this->file as $line) {
-            $replacement = preg_replace('/\s{2,}/', ' ', $line);
+            $replacement = preg_replace('/\w\s{2,}/', ' ', $line);
             if ($line !== $replacement) {
                 $this->addErrorMessage(sprintf(
                     '"%s" has > 1 space on line %s',

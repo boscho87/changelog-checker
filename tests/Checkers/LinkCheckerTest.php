@@ -9,7 +9,7 @@ use Boscho87\tests\BaseTestCase;
 /**
  * Class LinkCheckerTest
  */
-class LinkCheckerTest extends AbstractTypeCheckerTest
+class LinkCheckerTest extends AbstractCheckerTest
 {
     /**
      * @group unit
