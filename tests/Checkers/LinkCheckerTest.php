@@ -4,7 +4,6 @@ namespace Boscho87\tests\Checkers;
 
 use Boscho87\ChangelogChecker\Checkers\LinkChecker;
 use Boscho87\ChangelogChecker\Options\Option;
-use Boscho87\tests\BaseTestCase;
 
 /**
  * Class LinkCheckerTest
@@ -43,5 +42,13 @@ class LinkCheckerTest extends AbstractCheckerTest
         $linkChecker->execute($file);
         $expectedError = ['Version link for [1.1.0] is missing at the end of the file'];
         $this->assertEquals($expectedError, $linkChecker->getErrors());
+    }
+
+    /**
+     * @group unit
+     */
+    public function testIfFixCanAddMissingLinks(): void
+    {
+        $this->markTestIncomplete('Implement this test (TDD)');
     }
 }
