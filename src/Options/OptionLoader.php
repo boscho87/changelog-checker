@@ -5,6 +5,7 @@ namespace Boscho87\ChangelogChecker\Options;
 use Boscho87\ChangelogChecker\Exception\FileNotFoundException;
 
 /**
+ * @codeCoverageIgnore
  * Class OptionLoader
  */
 class OptionLoader

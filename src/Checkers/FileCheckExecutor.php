@@ -8,6 +8,7 @@ use Boscho87\ChangelogChecker\FileManager\FileInterface;
 use Boscho87\ChangelogChecker\Options\OptionResolver;
 
 /**
+ * @codeCoverageIgnore
  * Class FileCheckExecutor
  */
 class FileCheckExecutor

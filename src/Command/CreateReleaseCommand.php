@@ -2,6 +2,8 @@
 
 namespace Boscho87\ChangelogChecker\Command;
 
+use Boscho87\ChangelogChecker\Changelog\MutationManager;
+use Boscho87\ChangelogChecker\Composer\ComposerMutationManager;
 use Boscho87\ChangelogChecker\FileManager\File;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Todo refactor and extract Classes and methods
+ * @codeCoverageIgnore
  * Class CreateReleaseCommand
  */
 class CreateReleaseCommand extends Command
@@ -39,6 +41,12 @@ class CreateReleaseCommand extends Command
             'Composer File Path',
             'composer.json'
         );
+        $this->addArgument(
+            'commit',
+            null,
+            'should the command create a git tag, after the changelog is up to date',
+            false
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -46,80 +54,47 @@ class CreateReleaseCommand extends Command
         $style = new SymfonyStyle($input, $output);
         $changelogPath = realpath($input->getOption('changelog-file'));
         $composerFile = realpath($input->getOption('composer-file'));
+        $shouldCommit = $input->getArgument('commit');
         $changelogFile = new File($changelogPath);
+        $mutationManager = new MutationManager($changelogFile);
+        $composerMutationManager = new ComposerMutationManager();
         $changelogFile->writeBackup();
-        preg_match_all('/\[(\d+\.\d+\.\d+)\]\s/', $changelogFile->getContents(), $versions);
-        $lastVersion = $versions[1][0] ?? null;
-        $majorMinorBugfix = explode('.', $lastVersion);
-        $major = $majorMinorBugfix[0];
-        $minor = $majorMinorBugfix[1] + 1;
-        $bugfix = $majorMinorBugfix[2];
-        $release = sprintf('%d.%d.%d', $major, $minor, $bugfix);
+        $newVersion = $mutationManager->getIncreasedVersionNumber();
+        $lastVersion = $mutationManager->getLastVersion();
 
 
-        foreach ($changelogFile as $line) {
-            if (strpos($line, '[Unreleased]')) {
-                $lineAfterUnreleased = $changelogFile->getLine($changelogFile->lineNumber());
-                if (empty($lineAfterUnreleased)) {
-                    //todo check specific for One of the allowed verbs -> KeepAChangelog (Added,Fixed.....)
-                    throw new \Exception('invalid Changelog format, the unreleased section is empty (or the line underneath is missing)');
-                }
-                $date = date('Y-m-d');
-                $changelogFile->includeLinesAfter(['', sprintf('## [%s] - %s', $release, $date)]);
-                break;
-            }
+        $mutationManager->moveUnreleasedToNewVersion($newVersion);
+
+
+        if ($composerFile && $composerMutationManager->replaceComposerVersion($composerFile, $newVersion)) {
+            $style->info('Updated composer.json File version');
         }
 
-        if ($composerFile) {
-            $composerContent = file_get_contents($composerFile);
-            $replaced = preg_replace('/"version":"\d+\.\d+\.\d+"/', sprintf('"version": "%s"', $release), $composerContent);
-            if ($composerContent !== $replaced) {
-                file_put_contents($composerFile, $replaced);
-                $style->info('Updated composer File');
-            } else {
-                $style->info('Version in comopser.json not found (absolutely normal if you not implement open Source Libraries or something like that');
-            }
-        }
-
-
-        foreach ($changelogFile as $line) {
-            if (strpos($line, '[Unreleased]: ') !== false) {
-                $updatedUnreleasedLink = str_replace($lastVersion . '...', $release . '...', $line);
-                $changelogFile->setLine($updatedUnreleasedLink);
-                continue;
-            }
-            if (strpos($line, sprintf('[%s]: ', $lastVersion)) !== false) {
-                $oldLine = $line;
-                $changelogFile->includeLinesAfter([$oldLine]);
-                $line = str_replace($lastVersion, $release, $line);
-                $line = preg_replace('/\d+\.\d+\.\d+\.\.\./', $lastVersion . '...', $line);
-                $changelogFile->setLine($line);
-                break;
-            }
-        }
-
-
+        $mutationManager->updateVersionLinks($lastVersion, $newVersion);
         $changelogFile->write();
 
-        if (shell_exec('which git')) {
+        $hasGit = shell_exec('which git');
+        if (!$hasGit) {
+            $style->info('Did not Create git tags, git missing?');
+        }
+
+        if ($shouldCommit && $hasGit) {
             $commands = [
                 'git add .',
-                sprintf('git commit -m "Release: %s"', $release),
-                sprintf('git tag %s', $release),
+                sprintf('git commit -m "Release: %s"', $newVersion),
+                sprintf('git tag %s', $newVersion),
             ];
             foreach ($commands as $command) {
                 $result = shell_exec($command);
                 $style->newLine();
                 $style->info(sprintf('execute: %s, result: %s', $command, $result));
             }
-        } else {
-            $style->info('Did not Create git tags, git missing?');
         }
 
 
         $style->success(sprintf(
             'Created new Release %s',
-            $release
+            $newVersion
         ));
         return Command::SUCCESS;
     }

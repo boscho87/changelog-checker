@@ -2,8 +2,6 @@
 
 namespace Boscho87\ChangelogChecker\FileManager;
 
-use Boscho87\ChangelogChecker\Exception\FileNotFoundException;
-
 /**
  * Class File
  */
@@ -32,19 +30,14 @@ class File implements FileInterface
         return $this->content;
     }
 
-    public function getLines(): array
-    {
-        return $this->lines;
-    }
-
     public function getLine(int $number): string
     {
-        return $this->lines[$number];
+        return $this->lines[$number] ?? '';
     }
 
     public function current()
     {
-        return $this->lines[$this->currentLine];
+        return $this->lines[$this->currentLine] ?? null;
     }
 
     public function next()
@@ -82,18 +75,21 @@ class File implements FileInterface
         $this->content = implode(PHP_EOL, $this->lines);
     }
 
-    public function write(): void
+    public function write(string $filePath = null): void
     {
         $lastLine = count($this->lines) - 1;
         $lastLineContent = $this->lines[$lastLine];
         if (!empty($lastLineContent)) {
             $this->setLine('', $lastLine + 1);
         }
-
+        if ($filePath) {
+            file_put_contents($filePath, $this->content);
+            return;
+        }
         file_put_contents($this->filePath, $this->content);
     }
 
-    public function writeBackup(): void
+    public function writeBackup(): string
     {
         $pos = strrpos($this->filePath, '/');
         $filename = substr($this->filePath, $pos + 1);
@@ -107,9 +103,13 @@ class File implements FileInterface
 
         $this->removeOldBackups();
         file_put_contents($filePath, $this->getContents());
+        return $filePath;
     }
 
 
+    /**
+     * @codeCoverageIgnore
+     */
     protected function removeOldBackups(): void
     {
         $backupFiles = glob(sprintf('%s/%s.*', getcwd(), $this->backupFileSuffix));

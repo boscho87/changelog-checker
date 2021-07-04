@@ -4,6 +4,9 @@ to [Semantic Versioning](http://semver.org/).
 # Changelog
 
 ## [Unreleased]
+### Added
+- Added test Cases
+- Updated Create Release Command
 
 ## [1.2.0] - 2021-07-03
 ### Added

@@ -9,8 +9,6 @@ interface FileInterface extends \Iterator
 {
     public function getContents(): string;
 
-    public function getLines(): array;
-
     public function getLine(int $number): string;
 
     public function lineNumber(): int;

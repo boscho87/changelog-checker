@@ -14,14 +14,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
+ * @codeCoverageIgnore
  * Class ValidateChangelogCommand
  */
 class ValidateChangelogCommand extends Command
 {
+    public const COMMAND_NAME = 'validate';
+
     /**
      * ValidateChangelogCommand constructor.
      */
-    public function __construct($name = 'validate')
+    public function __construct($name = self::COMMAND_NAME)
     {
         parent::__construct($name);
     }

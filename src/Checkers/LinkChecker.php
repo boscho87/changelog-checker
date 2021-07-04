@@ -7,21 +7,15 @@ namespace Boscho87\ChangelogChecker\Checkers;
  */
 class LinkChecker extends AbstractChecker
 {
-    //works only with active brackets
-    private string $versionPattern = '/\[(\d+\.\d+\.\d+)\]/';
-
     protected function check(): void
     {
-        preg_match_all($this->versionPattern, $this->file->getContents(), $versionTags);
-        if (!is_array($versionTags) && array_key_exists(0, $versionTags)) {
-            return;
-        }
         $versions = [];
-        $versionTags = array_reverse($versionTags[0]);
+        $versionTags = $this->mutationManager->getAllTitleVersionTags();
         foreach ($versionTags as $tag) {
             if (!in_array($tag, $versions)) {
                 $pattern = preg_replace('/\[/', '\[', $tag);
                 $pattern = preg_replace('/\]/', '\]', $pattern);
+                $pattern = preg_replace('/\./', '\.', $pattern);
                 $pattern = sprintf('/(%s)\: (https:\/\/)/', $pattern);
                 preg_match($pattern, $this->file->getContents(), $link);
                 if (!array_key_exists(0, $link)) {
@@ -35,6 +29,10 @@ class LinkChecker extends AbstractChecker
         }
     }
 
+    /**
+     * //implement test and method (TDD)
+     * @codeCoverageIgnore
+     */
     protected function fix(): void
     {
         // This can be fixed but is a bit complicated
