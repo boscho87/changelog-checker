@@ -4,3 +4,4 @@ composer.phar
 .clc.**
 test_doc
 .phpunit.cache
+clover.xml

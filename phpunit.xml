@@ -12,6 +12,9 @@
         <exclude>
             <directory/>
         </exclude>
+        <report>
+            <clover outputFile="clover.xml" />
+        </report>
     </coverage>
     <php>
         <ini name="error_reporting" value="-1"/>
