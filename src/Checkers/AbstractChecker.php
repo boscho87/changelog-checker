@@ -2,6 +2,7 @@
 
 namespace Boscho87\ChangelogChecker\Checkers;
 
+use Boscho87\ChangelogChecker\Changelog\MutationManager;
 use Boscho87\ChangelogChecker\FileManager\FileInterface;
 use Boscho87\ChangelogChecker\Options\Option;
 
@@ -14,7 +15,8 @@ abstract class AbstractChecker
     private array $warnings = [];
     private array $errors = [];
     private array $fixed = [];
-    private Option $options;
+    protected Option $options;
+    protected MutationManager $mutationManager;
 
     /**
      * AbstractChecker constructor.
@@ -26,6 +28,9 @@ abstract class AbstractChecker
 
     public function execute(FileInterface $file): void
     {
+        $this->mutationManager = new MutationManager($file);
+
+
         $this->file = $file;
         if ($this->options->isCheck()) {
             $this->check();
@@ -69,16 +74,6 @@ abstract class AbstractChecker
     public function getFixed(): array
     {
         return array_reverse($this->fixed);
-    }
-
-    protected function currentVersion(): string
-    {
-        preg_match('/\d+\.\d+\.\d+/', $this->file->getContents(), $matches);
-        var_dump($matches);
-        die();
-        if ($matches) {
-            return $matches;
-        }
     }
 
     protected function isVersionLine(string $line): bool

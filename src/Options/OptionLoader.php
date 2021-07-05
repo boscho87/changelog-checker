@@ -5,6 +5,7 @@ namespace Boscho87\ChangelogChecker\Options;
 use Boscho87\ChangelogChecker\Exception\FileNotFoundException;
 
 /**
+ * @codeCoverageIgnore
  * Class OptionLoader
  */
 class OptionLoader
@@ -55,7 +56,7 @@ class OptionLoader
         $configs = array_merge($defaultConfigs, $configs, $inputfileConfig);
         foreach ($configs as $name => $config) {
             $fix = $this->forceFix !== null ? $this->forceFix : $config['fix'];
-            $this->options[$name] = new Option($config['check'], $config['error'], $fix);
+            $this->options[$name] = new Option($config['check'], $config['error'], $fix, $config);
         }
     }
 

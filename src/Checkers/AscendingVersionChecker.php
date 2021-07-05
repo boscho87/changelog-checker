@@ -11,6 +11,7 @@ class AscendingVersionChecker extends AbstractChecker
 
     protected function check(): void
     {
+        //todo check if a [Unreleased] tag is set
         $lastRawVersion = 999;
         $lastVersion = '999.0.0';
         $lastLine = 0;
@@ -40,6 +41,6 @@ class AscendingVersionChecker extends AbstractChecker
 
     protected function fix(): void
     {
-        // TODO: Implement fix() method.
+        //can not be savely fixed
     }
 }

@@ -21,8 +21,15 @@ return [
         'check' => true,
         'error' => true,
         'fix' => false,
+        //commits allowed without a changelog change
+        'fail_after' => 4,
     ],
     'sequence' => [
+        'check' => true,
+        'error' => true,
+        'fix' => false,
+    ],
+    'linkChecker' => [
         'check' => true,
         'error' => true,
         'fix' => false,

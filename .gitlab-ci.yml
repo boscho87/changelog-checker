@@ -1,0 +1,50 @@
+stages:
+  - php_test
+  - prepare_live
+  - deploy_live
+
+php_test:
+  stage: php_test
+  image: php:7.4
+  before_script:
+    - ./_ci/install_php.sh
+  script:
+    - composer install
+    - composer install --working-dir=tools/php-cs-fixer
+    - ./_ci/cs_fixer.sh
+    - php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-text --colors=never --group unit,database
+  except:
+    - master
+    - tags
+
+deploy_live_prepare:
+  stage: prepare_live
+  image: php:7.4
+  before_script:
+    - $CI_PROJECT_DIR/_ci/version_tag_check.sh
+    - ./_ci/install_php.sh
+    - echo $($CI_PROJECT_DIR/_ci/current_changes.sh) #create changes.txt
+    - cat changes.txt
+  script:
+    - php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-text --colors=never --group unit,database
+  artifacts:
+    paths:
+      - changes.txt
+  only:
+    - tags
+
+release_job:
+  stage: deploy_live
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs:
+    - job: deploy_live_prepare
+      artifacts: true
+  script:
+    - 'cat changes.txt'
+  release:
+    name: 'Release $CI_COMMIT_TAG'
+    description: '$(cat changes.txt)'
+    tag_name: '$CI_COMMIT_TAG'
+    ref: '$CI_COMMIT_TAG'
+  only:
+    - tags
