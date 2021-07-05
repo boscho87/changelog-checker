@@ -9,6 +9,8 @@ php_test:
   before_script:
     - ./_ci/install_php.sh
   script:
+    - composer install
+    - composer install --working-dir=tools/php-cs-fixer
     - ./_ci/cs_fixer.sh
     - php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-text --colors=never --group unit,database
   except:
