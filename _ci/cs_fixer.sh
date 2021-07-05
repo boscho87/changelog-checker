@@ -11,7 +11,7 @@ $csfixer fix $dir/src --using-cache=no --diff
     exit 100
 fi
 
-if grep -Enr 'var_dump\(' ${dir}src/ | grep -Enr 'var_dump\(' ${dir}tests/
+if grep -Enr 'var_dump\(' ${dir}/src/ | grep -Enr 'var_dump\(' ${dir}/tests/
 then
     echo "remove the var_dump() listed in the comments above"
     exit 100;
