@@ -5,3 +5,4 @@ composer.phar
 test_doc
 .phpunit.cache
 clover.xml
+tools/php-cs-fixer/vendor
