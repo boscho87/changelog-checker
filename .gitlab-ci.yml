@@ -14,7 +14,6 @@ php_test:
     - ./_ci/cs_fixer.sh
     - php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-text --colors=never --group unit,database
   except:
-    - master
     - tags
 
 deploy_live_prepare:
