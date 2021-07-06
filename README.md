@@ -12,7 +12,7 @@ tool if you want (see more in configs)
 
 On Every command it will create a Changelog Backup for you. It will rotate 4 Backlog files.
 
-Follows the Guiltiness from [Keep A Changelog](https://keepachangelog.com/en/1.1.0/)
+Follows the Guidelines from [Keep A Changelog](https://keepachangelog.com/)
 
 This tool should only be used in development environments.
 
@@ -83,6 +83,7 @@ return [
         'error' => true,
         'fix' => false,
     ],
+    //has still some bugs
     'increased' => [
         'check' => false,
         'error' => true,
