@@ -41,17 +41,28 @@ class MutationManager
     public function getLastVersion(): ?string
     {
         preg_match_all(Regex::VERSION_TITLE_PATTERN, $this->changelogFile->getContents(), $versions);
-        return $versions[1][0] ?? null;
+        $version = $versions[1][0] ?? null;
+        if ($version) {
+            return str_replace(['[', ']'], '', $version);
+        }
+        return null;
     }
 
-    public function getIncreasedVersionNumber(string $versionType = self::MINOR): string
+    public function getIncreasedVersionNumber(int $versionType = self::MINOR): string
     {
-        $lastVersion = $this->getLastVersion();
+        $lastVersion =  $this->getLastVersion();
         $majorMinorBugfix = explode('.', $lastVersion);
         $majorMinorBugfix[$versionType]++;
-        $major = $majorMinorBugfix[0];
-        $minor = $majorMinorBugfix[1];
-        $bugfix = $majorMinorBugfix[2];
+        if ($versionType < self::BUGFIX) {
+            $majorMinorBugfix[self::BUGFIX] = 0;
+        }
+        if ($versionType < self::MINOR) {
+            $majorMinorBugfix[self::MINOR] = 0;
+        }
+        $major = $majorMinorBugfix[self::MAJOR];
+        $minor = $majorMinorBugfix[self::MINOR];
+        $bugfix = $majorMinorBugfix[self::BUGFIX];
+
         return sprintf('%d.%d.%d', $major, $minor, $bugfix);
     }
 

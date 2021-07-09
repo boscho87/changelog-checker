@@ -8,6 +8,10 @@ to [Semantic Versioning](http://semver.org/).
 - Added test Cases
 - Updated Create Release Command
 - Refactored the Checkers after test Updates
+- MutationManager Test
+
+#### Fixed
+- Increased Version Numbers will now increase the suffix e.g. 3.2.1 will not be 3.3.1 but 3.3.0
 
 ## [1.2.0] - 2021-07-03
 ### Added
