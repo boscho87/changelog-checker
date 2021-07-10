@@ -2,6 +2,7 @@
 
 namespace Boscho87\tests\Checkers;
 
+use Boscho87\ChangelogChecker\Options\Option;
 use Boscho87\tests\BaseTestCase;
 
 /**
@@ -9,4 +10,8 @@ use Boscho87\tests\BaseTestCase;
  */
 abstract class AbstractCheckerTest extends BaseTestCase
 {
+    protected function checkFixerErrorOption(array $moreOptions = []): Option
+    {
+        return new Option(true, true, true, $moreOptions);
+    }
 }
