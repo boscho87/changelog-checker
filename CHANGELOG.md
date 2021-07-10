@@ -12,6 +12,7 @@ to [Semantic Versioning](http://semver.org/).
 
 #### Fixed
 - Increased Version Numbers will now increase the suffix e.g. 3.2.1 will not be 3.3.1 but 3.3.0
+- Fixed Increase Checker, due a Problem when a number with more than one digit appear in the Version
 
 ## [1.2.0] - 2021-07-03
 ### Added
