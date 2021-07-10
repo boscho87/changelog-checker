@@ -4,6 +4,8 @@ to [Semantic Versioning](http://semver.org/).
 # Changelog
 
 ## [Unreleased]
+
+## [1.3.0] - 2021-07-10
 ### Added
 - Added test Cases
 - Updated Create Release Command
@@ -47,7 +49,8 @@ to [Semantic Versioning](http://semver.org/).
 ### Added
 - Create Project
 
-[Unreleased]: https://github.com/boscho87/changelog-checker/compare/1.2.0...master
+[Unreleased]: https://github.com/boscho87/changelog-checker/compare/1.3.0...master
+[1.3.0]: https://github.com/boscho87/changelog-checker/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/boscho87/changelog-checker/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/boscho87/changelog-checker/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/boscho87/changelog-checker/compare/0.0.4...1.0.0
